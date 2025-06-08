@@ -3,686 +3,604 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>恐怖症対応映画情報サイト - PhobiaFree Cinema</title>
+    <title>安心映画ナビ - 恐怖要素事前確認サイト</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: 'Noto Sans JP', Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            color: #333;
         }
-        
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
-        
-        header {
+
+        .header {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 30px;
             margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
-        
-        h1 {
+
+        .header h1 {
             color: #4a5568;
-            font-size: 2.5em;
+            font-size: 2.5rem;
             margin-bottom: 10px;
             background: linear-gradient(45deg, #667eea, #764ba2);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
-        
-        .subtitle {
-            color: #718096;
-            font-size: 1.2em;
+
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
             margin-bottom: 20px;
         }
-        
+
         .search-section {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 30px;
             margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
-        
-        .search-form {
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #4a5568;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .phobia-filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .phobia-item {
+            background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 12px 20px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .phobia-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(240, 147, 251, 0.4);
+        }
+
+        .phobia-item.selected {
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .movie-search {
             display: flex;
             gap: 15px;
             margin-bottom: 20px;
-            flex-wrap: wrap;
         }
-        
+
         .search-input {
             flex: 1;
-            padding: 15px;
+            padding: 15px 20px;
             border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 16px;
-            min-width: 200px;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
         }
-        
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
         .search-btn {
-            padding: 15px 30px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
+            padding: 15px 30px;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            transition: transform 0.2s;
+            transition: all 0.3s ease;
         }
-        
+
         .search-btn:hover {
             transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
         }
-        
-        .phobia-filters {
-            margin-top: 20px;
-        }
-        
-        .phobia-grid {
+
+        .movie-results {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 10px;
-            margin-top: 15px;
-        }
-        
-        .phobia-item {
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            background: #f7fafc;
-            border-radius: 8px;
-            transition: background 0.2s;
-        }
-        
-        .phobia-item:hover {
-            background: #edf2f7;
-        }
-        
-        .phobia-item input {
-            margin-right: 10px;
-        }
-        
-        .movies-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
             margin-top: 30px;
         }
-        
+
         .movie-card {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            border-radius: 20px;
+            border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
         }
-        
+
         .movie-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
         }
-        
+
         .movie-poster {
             width: 100%;
-            height: 400px;
+            height: 200px;
             object-fit: cover;
-            background: #e2e8f0;
         }
-        
+
         .movie-info {
             padding: 20px;
         }
-        
+
         .movie-title {
-            font-size: 1.3em;
-            font-weight: bold;
+            font-size: 1.2rem;
+            font-weight: 600;
             color: #2d3748;
             margin-bottom: 10px;
         }
-        
+
         .movie-year {
             color: #718096;
             margin-bottom: 15px;
         }
-        
+
         .phobia-warnings {
-            margin-top: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
         }
-        
+
         .warning-tag {
-            display: inline-block;
             background: #fed7d7;
             color: #c53030;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 0.8em;
-            margin: 2px;
-            font-weight: bold;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
         }
-        
+
         .add-movie-section {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 30px;
-            margin: 30px 0;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
-        
+
         .form-group {
             margin-bottom: 20px;
         }
-        
+
         .form-label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
+            margin-bottom: 8px;
+            font-weight: 600;
             color: #4a5568;
         }
-        
+
         .form-input, .form-textarea {
             width: 100%;
-            padding: 12px;
+            padding: 12px 15px;
             border: 2px solid #e2e8f0;
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
         }
-        
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
         .form-textarea {
-            min-height: 100px;
+            height: 100px;
             resize: vertical;
         }
-        
-        .toggle-btn {
-            background: #4299e1;
+
+        .submit-btn {
+            background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
             color: white;
             border: none;
+            border-radius: 12px;
             padding: 15px 30px;
-            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            font-size: 16px;
-            margin-bottom: 20px;
-            transition: background 0.2s;
+            transition: all 0.3s ease;
         }
-        
-        .toggle-btn:hover {
-            background: #3182ce;
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(245, 87, 108, 0.3);
         }
-        
-        .add-form {
-            display: none;
-        }
-        
-        .add-form.active {
-            display: block;
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 50px;
-            color: #718096;
-            font-size: 1.2em;
-        }
-        
-        .error-message {
-            background: #fed7d7;
-            color: #c53030;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 20px 0;
-            text-align: center;
-        }
-        
-        /* Google AdSense プレースホルダー */
+
         .ad-space {
             background: #f7fafc;
             border: 2px dashed #cbd5e0;
-            border-radius: 10px;
+            border-radius: 12px;
             padding: 40px;
             text-align: center;
-            margin: 30px 0;
             color: #718096;
+            margin: 30px 0;
         }
-        
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
         .no-results {
             text-align: center;
-            padding: 50px;
-            color: #718096;
-        }
-        
-        @media (max-width: 768px) {
-            .search-form {
-                flex-direction: column;
-            }
-            
-            .phobia-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            h1 {
-                font-size: 2em;
-            }
+            padding: 40px;
+            color: #666;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>🎬 PhobiaFree Cinema</h1>
-            <p class="subtitle">恐怖症の方が安心して映画を楽しめる情報サイト</p>
-            <p>映画の恐怖要素を事前にチェックして、安心して映画鑑賞を楽しみましょう</p>
-        </header>
+        <div class="header">
+            <h1>🎬 安心映画ナビ</h1>
+            <p>恐怖症の方でも安心して映画を楽しめるよう、事前に恐怖要素をチェックできるサイトです</p>
+        </div>
 
-        <!-- Google AdSense プレースホルダー -->
         <div class="ad-space">
-            <p>Google AdSense 広告スペース</p>
-            <small>実装時にはここにAdSenseコードを配置</small>
+            <!-- Google AdSense広告スペース -->
+            <p>Google AdSense 広告エリア</p>
         </div>
 
         <div class="search-section">
-            <h2>🔍 映画を検索</h2>
-            <div class="search-form">
-                <input type="text" id="searchInput" class="search-input" placeholder="映画のタイトルを入力してください">
-                <button onclick="searchMovies()" class="search-btn">検索</button>
-            </div>
+            <h2 class="section-title">🔍 恐怖要素で絞り込み検索</h2>
             
-            <div class="phobia-filters">
-                <h3>🔍 検索したい恐怖要素を選択</h3>
-                <div class="phobia-grid" id="phobiaFilters">
-                    <div class="phobia-item">
-                        <input type="checkbox" id="heights" value="高所">
-                        <label for="heights">高所恐怖症</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="enclosed" value="閉所">
-                        <label for="enclosed">閉所恐怖症</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="darkness" value="暗所">
-                        <label for="darkness">暗所恐怖症</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="spiders" value="蜘蛛">
-                        <label for="spiders">蜘蛛恐怖症</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="butterflies" value="蝶">
-                        <label for="butterflies">蝶恐怖症</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="ants" value="蟻">
-                        <label for="ants">蟻恐怖症</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="insects" value="昆虫">
-                        <label for="insects">昆虫恐怖症</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="frogs" value="カエル">
-                        <label for="frogs">カエル恐怖症</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="snakes" value="ヘビ">
-                        <label for="snakes">ヘビ恐怖症</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="clusters" value="集合体">
-                        <label for="clusters">集合体恐怖症</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="blood" value="血液描写">
-                        <label for="blood">血液描写恐怖症</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="water" value="水・溺水">
-                        <label for="water">水・溺水恐怖症</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="thunder" value="雷">
-                        <label for="thunder">雷恐怖症</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="vomit" value="嘔吐">
-                        <label for="vomit">嘔吐恐怖症</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="needles" value="注射・先端">
-                        <label for="needles">注射・先端恐怖症</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="clowns" value="ピエロ">
-                        <label for="clowns">ピエロ恐怖症</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="ghosts" value="幽霊・超常現象">
-                        <label for="ghosts">幽霊・超常現象恐怖症</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="corpses" value="死体">
-                        <label for="corpses">死体恐怖症</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="others" value="その他">
-                        <label for="others">その他</label>
-                    </div>
-                </div>
+            <div class="phobia-filters" id="phobiaFilters">
+                <button class="phobia-item" data-phobia="高所">高所恐怖症</button>
+                <button class="phobia-item" data-phobia="閉所">閉所恐怖症</button>
+                <button class="phobia-item" data-phobia="暗所">暗所恐怖症</button>
+                <button class="phobia-item" data-phobia="蜘蛛">蜘蛛恐怖症</button>
+                <button class="phobia-item" data-phobia="蝶">蝶恐怖症</button>
+                <button class="phobia-item" data-phobia="蟻">蟻恐怖症</button>
+                <button class="phobia-item" data-phobia="昆虫">昆虫恐怖症</button>
+                <button class="phobia-item" data-phobia="カエル">カエル恐怖症</button>
+                <button class="phobia-item" data-phobia="ヘビ">ヘビ恐怖症</button>
+                <button class="phobia-item" data-phobia="集合体">集合体恐怖症</button>
+                <button class="phobia-item" data-phobia="血液描写">血液描写</button>
+                <button class="phobia-item" data-phobia="水・溺水">水・溺水恐怖症</button>
+                <button class="phobia-item" data-phobia="雷">雷恐怖症</button>
+                <button class="phobia-item" data-phobia="嘔吐">嘔吐恐怖症</button>
+                <button class="phobia-item" data-phobia="注射・先端">注射・先端恐怖症</button>
+                <button class="phobia-item" data-phobia="ピエロ">ピエロ恐怖症</button>
+                <button class="phobia-item" data-phobia="幽霊・超常現象">幽霊・超常現象</button>
+                <button class="phobia-item" data-phobia="死体">死体描写</button>
+                <button class="phobia-item" data-phobia="その他">その他</button>
+            </div>
+
+            <div class="movie-search">
+                <input type="text" class="search-input" id="movieSearchInput" placeholder="映画タイトルを入力してください...">
+                <button class="search-btn" onclick="searchMovies()">🔍 検索</button>
             </div>
         </div>
 
-        <div id="loadingDiv" class="loading" style="display: none;">
-            🔍 映画を検索中...
-        </div>
+        <div id="movieResults" class="movie-results"></div>
 
-        <div id="errorDiv" class="error-message" style="display: none;"></div>
-
-        <div id="moviesContainer" class="movies-grid"></div>
-
-        <!-- Google AdSense プレースホルダー -->
         <div class="ad-space">
-            <p>Google AdSense 広告スペース</p>
-            <small>実装時にはここにAdSenseコードを配置</small>
+            <!-- Google AdSense広告スペース -->
+            <p>Google AdSense 広告エリア</p>
         </div>
 
         <div class="add-movie-section">
-            <button onclick="toggleAddForm()" class="toggle-btn">📝 新しい映画情報を追加</button>
+            <h2 class="section-title">➕ 映画情報を追加</h2>
+            <p style="text-align: center; margin-bottom: 25px; color: #666;">
+                データベースにない映画の恐怖要素情報を追加できます
+            </p>
             
-            <div id="addMovieForm" class="add-form">
-                <h3>映画の恐怖要素情報を追加</h3>
-                <p>サイトに掲載されていない映画の恐怖要素情報を投稿できます。</p>
+            <form id="addMovieForm">
+                <div class="form-group">
+                    <label class="form-label" for="movieTitle">映画タイトル *</label>
+                    <input type="text" class="form-input" id="movieTitle" required>
+                </div>
                 
-                <form onsubmit="submitMovieInfo(event)">
-                    <div class="form-group">
-                        <label class="form-label">映画タイトル *</label>
-                        <input type="text" id="movieTitle" class="form-input" required placeholder="例: ジョーズ">
+                <div class="form-group">
+                    <label class="form-label" for="releaseYear">公開年</label>
+                    <input type="number" class="form-input" id="releaseYear" min="1900" max="2030">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">恐怖要素 *</label>
+                    <div class="phobia-filters" id="addMoviePhobias">
+                        <button type="button" class="phobia-item" data-phobia="高所">高所</button>
+                        <button type="button" class="phobia-item" data-phobia="閉所">閉所</button>
+                        <button type="button" class="phobia-item" data-phobia="暗所">暗所</button>
+                        <button type="button" class="phobia-item" data-phobia="蜘蛛">蜘蛛</button>
+                        <button type="button" class="phobia-item" data-phobia="蝶">蝶</button>
+                        <button type="button" class="phobia-item" data-phobia="蟻">蟻</button>
+                        <button type="button" class="phobia-item" data-phobia="昆虫">昆虫</button>
+                        <button type="button" class="phobia-item" data-phobia="カエル">カエル</button>
+                        <button type="button" class="phobia-item" data-phobia="ヘビ">ヘビ</button>
+                        <button type="button" class="phobia-item" data-phobia="集合体">集合体</button>
+                        <button type="button" class="phobia-item" data-phobia="血液描写">血液描写</button>
+                        <button type="button" class="phobia-item" data-phobia="水・溺水">水・溺水</button>
+                        <button type="button" class="phobia-item" data-phobia="雷">雷</button>
+                        <button type="button" class="phobia-item" data-phobia="嘔吐">嘔吐</button>
+                        <button type="button" class="phobia-item" data-phobia="注射・先端">注射・先端</button>
+                        <button type="button" class="phobia-item" data-phobia="ピエロ">ピエロ</button>
+                        <button type="button" class="phobia-item" data-phobia="幽霊・超常現象">幽霊・超常現象</button>
+                        <button type="button" class="phobia-item" data-phobia="死体">死体</button>
+                        <button type="button" class="phobia-item" data-phobia="その他">その他</button>
                     </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">制作年</label>
-                        <input type="number" id="movieYear" class="form-input" min="1900" max="2030" placeholder="例: 1975">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">監督</label>
-                        <input type="text" id="movieDirector" class="form-input" placeholder="例: スティーブン・スピルバーグ">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">恐怖要素 *</label>
-                        <div class="phobia-grid">
-                            <div class="phobia-item">
-                                <input type="checkbox" id="add_heights" name="phobias" value="高所">
-                                <label for="add_heights">高所恐怖症</label>
-                            </div>
-                            <div class="phobia-item">
-                                <input type="checkbox" id="add_enclosed" name="phobias" value="閉所">
-                                <label for="add_enclosed">閉所恐怖症</label>
-                            </div>
-                            <div class="phobia-item">
-                                <input type="checkbox" id="add_darkness" name="phobias" value="暗所">
-                                <label for="add_darkness">暗所恐怖症</label>
-                            </div>
-                            <div class="phobia-item">
-                                <input type="checkbox" id="add_spiders" name="phobias" value="蜘蛛">
-                                <label for="add_spiders">蜘蛛恐怖症</label>
-                            </div>
-                            <div class="phobia-item">
-                                <input type="checkbox" id="add_butterflies" name="phobias" value="蝶">
-                                <label for="add_butterflies">蝶恐怖症</label>
-                            </div>
-                            <div class="phobia-item">
-                                <input type="checkbox" id="add_ants" name="phobias" value="蟻">
-                                <label for="add_ants">蟻恐怖症</label>
-                            </div>
-                            <div class="phobia-item">
-                                <input type="checkbox" id="add_insects" name="phobias" value="昆虫">
-                                <label for="add_insects">昆虫恐怖症</label>
-                            </div>
-                            <div class="phobia-item">
-                                <input type="checkbox" id="add_frogs" name="phobias" value="カエル">
-                                <label for="add_frogs">カエル恐怖症</label>
-                            </div>
-                            <div class="phobia-item">
-                                <input type="checkbox" id="add_snakes" name="phobias" value="ヘビ">
-                                <label for="add_snakes">ヘビ恐怖症</label>
-                            </div>
-                            <div class="phobia-item">
-                                <input type="checkbox" id="add_clusters" name="phobias" value="集合体">
-                                <label for="add_clusters">集合体恐怖症</label>
-                            </div>
-                            <div class="phobia-item">
-                                <input type="checkbox" id="add_blood" name="phobias" value="血液描写">
-                                <label for="add_blood">血液描写恐怖症</label>
-                            </div>
-                            <div class="phobia-item">
-                                <input type="checkbox" id="add_water" name="phobias" value="水・溺水">
-                                <label for="add_water">水・溺水恐怖症</label>
-                            </div>
-                            <div class="phobia-item">
-                                <input type="checkbox" id="add_thunder" name="phobias" value="雷">
-                                <label for="add_thunder">雷恐怖症</label>
-                            </div>
-                            <div class="phobia-item">
-                                <input type="checkbox" id="add_vomit" name="phobias" value="嘔吐">
-                                <label for="add_vomit">嘔吐恐怖症</label>
-                            </div>
-                            <div class="phobia-item">
-                                <input type="checkbox" id="add_needles" name="phobias" value="注射・先端">
-                                <label for="add_needles">注射・先端恐怖症</label>
-                            </div>
-                            <div class="phobia-item">
-                                <input type="checkbox" id="add_clowns" name="phobias" value="ピエロ">
-                                <label for="add_clowns">ピエロ恐怖症</label>
-                            </div>
-                            <div class="phobia-item">
-                                <input type="checkbox" id="add_ghosts" name="phobias" value="幽霊・超常現象">
-                                <label for="add_ghosts">幽霊・超常現象恐怖症</label>
-                            </div>
-                            <div class="phobia-item">
-                                <input type="checkbox" id="add_corpses" name="phobias" value="死体">
-                                <label for="add_corpses">死体恐怖症</label>
-                            </div>
-                            <div class="phobia-item">
-                                <input type="checkbox" id="add_others" name="phobias" value="その他">
-                                <label for="add_others">その他</label>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">詳細説明</label>
-                        <textarea id="movieDescription" class="form-textarea" placeholder="恐怖要素の詳細な説明や出現するシーンについて記載してください"></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">投稿者名（任意）</label>
-                        <input type="text" id="submitterName" class="form-input" placeholder="匿名">
-                    </div>
-                    
-                    <button type="submit" class="search-btn">投稿する</button>
-                </form>
-            </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="movieDescription">詳細説明・シーンの説明</label>
+                    <textarea class="form-textarea" id="movieDescription" placeholder="どのようなシーンで恐怖要素が出現するか、詳しく説明してください..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="submitterName">投稿者名（任意）</label>
+                    <input type="text" class="form-input" id="submitterName" placeholder="匿名">
+                </div>
+                
+                <button type="submit" class="submit-btn">📝 情報を追加</button>
+            </form>
         </div>
     </div>
 
     <script>
-        const API_KEY = '9c5b6fe18f36543b858effdaf87e44e0';
-        const BASE_URL = 'https://api.themoviedb.org/3';
-        const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
+        const TMDB_API_KEY = '9c5b6fe18f36543b858effdaf87e44e0';
+        const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
         
-        // サンプルの恐怖症データベース（実際の実装では外部データベースと連携）
-        const phobiaDatabase = {
-            // ホラー映画のサンプルデータ
-            'ジョーズ': {
-                phobias: ['水・溺水', '血液描写'],
-                description: 'サメによる攻撃シーンが多数。水中や海でのシーンが頻繁に登場。'
+        // サンプルデータ（実際の運用では外部データベースを使用）
+        let movieDatabase = [
+            {
+                title: "IT イット",
+                year: 2017,
+                phobias: ["ピエロ", "血液描写", "暗所", "その他"],
+                description: "ピエロの恐怖シーンが多数あります",
+                poster: null
             },
-            'アラクノフォビア': {
-                phobias: ['蜘蛛', '昆虫'],
-                description: 'タイトル通り蜘蛛が主要な恐怖要素。大量の蜘蛛が登場。'
+            {
+                title: "ジョーズ",
+                year: 1975,
+                phobias: ["水・溺水", "血液描写"],
+                description: "海でのサメ襲撃シーンがあります",
+                poster: null
             },
-            'クローズド・スペース': {
-                phobias: ['閉所'],
-                description: '狭い空間での恐怖を描いた作品。'
-            },
-            'エクソシスト': {
-                phobias: ['幽霊・超常現象', '嘔吐'],
-                description: '悪魔憑きを扱った超常現象ホラー。嘔吐シーンあり。'
-            },
-            'イット': {
-                phobias: ['ピエロ'],
-                description: '恐怖のピエロが主要な登場人物。'
+            {
+                title: "アラクノフォビア",
+                year: 1990,
+                phobias: ["蜘蛛", "昆虫"],
+                description: "蜘蛛が大量に出現するシーンがあります",
+                poster: null
             }
-        };
+        ];
 
-        // TMDB APIから映画を検索
+        let selectedPhobias = [];
+        let selectedPhobiasForAdd = [];
+
+        // 恐怖要素フィルター機能
+        document.getElementById('phobiaFilters').addEventListener('click', function(e) {
+            if (e.target.classList.contains('phobia-item')) {
+                const phobia = e.target.dataset.phobia;
+                if (selectedPhobias.includes(phobia)) {
+                    selectedPhobias = selectedPhobias.filter(p => p !== phobia);
+                    e.target.classList.remove('selected');
+                } else {
+                    selectedPhobias.push(phobia);
+                    e.target.classList.add('selected');
+                }
+                filterMovies();
+            }
+        });
+
+        // 映画追加フォームの恐怖要素選択
+        document.getElementById('addMoviePhobias').addEventListener('click', function(e) {
+            if (e.target.classList.contains('phobia-item')) {
+                const phobia = e.target.dataset.phobia;
+                if (selectedPhobiasForAdd.includes(phobia)) {
+                    selectedPhobiasForAdd = selectedPhobiasForAdd.filter(p => p !== phobia);
+                    e.target.classList.remove('selected');
+                } else {
+                    selectedPhobiasForAdd.push(phobia);
+                    e.target.classList.add('selected');
+                }
+            }
+        });
+
+        // TMDB API検索機能
         async function searchMovies() {
-            const query = document.getElementById('searchInput').value.trim();
+            const query = document.getElementById('movieSearchInput').value.trim();
             if (!query) {
-                showError('検索キーワードを入力してください');
+                displayMovies(movieDatabase);
                 return;
             }
 
-            showLoading(true);
-            hideError();
+            const resultsDiv = document.getElementById('movieResults');
+            resultsDiv.innerHTML = '<div class="loading">🔍 検索中...</div>';
 
             try {
-                const response = await fetch(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}&language=ja-JP`);
+                const response = await fetch(
+                    `${TMDB_BASE_URL}/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&language=ja-JP`
+                );
                 const data = await response.json();
                 
-                if (data.results && data.results.length > 0) {
-                    displayMovies(data.results);
-                } else {
-                    showNoResults();
-                }
+                // TMDB結果とローカルデータベースをマージ
+                const mergedResults = mergeMovieData(data.results);
+                displayMovies(mergedResults);
             } catch (error) {
                 console.error('検索エラー:', error);
-                showError('検索中にエラーが発生しました。しばらく待ってから再試行してください。');
-            } finally {
-                showLoading(false);
+                resultsDiv.innerHTML = '<div class="no-results">検索中にエラーが発生しました</div>';
             }
         }
 
-        // 映画結果を表示
-        function displayMovies(movies) {
-            const container = document.getElementById('moviesContainer');
-            const selectedPhobias = getSelectedPhobias();
+        // TMDB結果とローカルデータベースをマージ
+        function mergeMovieData(tmdbResults) {
+            const merged = [];
             
-            const filteredMovies = movies.filter(movie => {
-                const moviePhobias = getMoviePhobias(movie.title);
-                // 恐怖要素が選択されていない場合は全ての映画を表示
-                if (selectedPhobias.length === 0) {
-                    return true;
-                }
-                // 選択された恐怖要素のいずれかが映画に含まれている場合に表示
-                return hasSelectedPhobias(moviePhobias, selectedPhobias);
+            // TMDBの結果を処理
+            tmdbResults.forEach(movie => {
+                const localData = movieDatabase.find(local => 
+                    local.title.toLowerCase() === movie.title.toLowerCase() ||
+                    (movie.release_date && local.year === new Date(movie.release_date).getFullYear())
+                );
+                
+                merged.push({
+                    title: movie.title,
+                    year: movie.release_date ? new Date(movie.release_date).getFullYear() : null,
+                    phobias: localData ? localData.phobias : [],
+                    description: localData ? localData.description : '恐怖要素の情報がありません',
+                    poster: movie.poster_path ? `https://image.tmdb.org/t/p/w300${movie.poster_path}` : null,
+                    overview: movie.overview
+                });
             });
-
-            if (filteredMovies.length === 0) {
-                if (selectedPhobias.length > 0) {
-                    container.innerHTML = '<div class="no-results">選択した恐怖要素を含む映画が見つかりませんでした。</div>';
-                } else {
-                    container.innerHTML = '<div class="no-results">検索結果が見つかりませんでした。</div>';
+            
+            // ローカルデータベースの映画で、TMDBにないものを追加
+            movieDatabase.forEach(local => {
+                const exists = merged.find(m => m.title.toLowerCase() === local.title.toLowerCase());
+                if (!exists) {
+                    merged.push(local);
                 }
+            });
+            
+            return merged;
+        }
+
+        // 映画の表示
+        function displayMovies(movies) {
+            const resultsDiv = document.getElementById('movieResults');
+            
+            if (movies.length === 0) {
+                resultsDiv.innerHTML = '<div class="no-results">😔 該当する映画が見つかりませんでした</div>';
                 return;
             }
 
-            container.innerHTML = filteredMovies.map(movie => {
-                const moviePhobias = getMoviePhobias(movie.title);
-                const phobiaWarnings = moviePhobias.map(phobia => 
-                    `<span class="warning-tag">${phobia}</span>`
-                ).join('');
-
-                const posterUrl = movie.poster_path 
-                    ? `${IMAGE_BASE_URL}${movie.poster_path}` 
-                    : 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="450" viewBox="0 0 300 450"><rect width="300" height="450" fill="%23e2e8f0"/><text x="150" y="225" text-anchor="middle" fill="%23718096" font-size="16">ポスター未登録</text></svg>';
-
-                return `
-                    <div class="movie-card">
-                        <img src="${posterUrl}" alt="${movie.title}" class="movie-poster" onerror="this.src='data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;300&quot; height=&quot;450&quot; viewBox=&quot;0 0 300 450&quot;><rect width=&quot;300&quot; height=&quot;450&quot; fill=&quot;%23e2e8f0&quot;/><text x=&quot;150&quot; y=&quot;225&quot; text-anchor=&quot;middle&quot; fill=&quot;%23718096&quot; font-size=&quot;16&quot;>ポスター未登録</text></svg>'">
-                        <div class="movie-info">
-                            <div class="movie-title">${movie.title}</div>
-                            <div class="movie-year">${movie.release_date ? new Date(movie.release_date).getFullYear() : '年不明'}</div>
-                            <div class="movie-overview">${movie.overview || '概要なし'}</div>
-                            ${phobiaWarnings ? `<div class="phobia-warnings"><h4>⚠️ 恐怖要素:</h4>${phobiaWarnings}</div>` : '<div style="color: #48bb78; font-weight: bold;">✅ 恐怖要素情報なし</div>'}
+            const moviesHTML = movies.map(movie => `
+                <div class="movie-card">
+                    ${movie.poster ? `<img src="${movie.poster}" alt="${movie.title}" class="movie-poster">` : 
+                      '<div class="movie-poster" style="background: linear-gradient(45deg, #f0f0f0, #e0e0e0); display: flex; align-items: center; justify-content: center; color: #999;">🎬</div>'}
+                    <div class="movie-info">
+                        <h3 class="movie-title">${movie.title}</h3>
+                        ${movie.year ? `<p class="movie-year">${movie.year}年</p>` : ''}
+                        ${movie.overview ? `<p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">${movie.overview.substring(0, 100)}...</p>` : ''}
+                        <div class="phobia-warnings">
+                            ${movie.phobias.length > 0 ? 
+                                movie.phobias.map(phobia => `<span class="warning-tag">⚠️ ${phobia}</span>`).join('') :
+                                '<span style="color: #38a169;">✅ 報告された恐怖要素なし</span>'
+                            }
                         </div>
+                        ${movie.description && movie.phobias.length > 0 ? 
+                            `<p style="margin-top: 10px; font-size: 0.9rem; color: #666;">${movie.description}</p>` : ''}
                     </div>
-                `;
-            }).join('');
-        }
-
-        // 選択された恐怖症フィルターを取得
-        function getSelectedPhobias() {
-            const checkboxes = document.querySelectorAll('#phobiaFilters input[type="checkbox"]:checked');
-            return Array.from(checkboxes).map(cb => cb.value);
-        }
-
-        // 映画の恐怖症情報を取得
-        function getMoviePhobias(title) {
-            const movieData = phobiaDatabase[title];
-            return movieData ? movieData.phobias : [];
-        }
-
-        // 選択された恐怖症があるかチェック
-        function hasSelectedPhobias(moviePhobias, selectedPhobias) {
-            return moviePhobias.some(phobia => selectedPhobias.includes(phobia));
-        }
-
-        // ローディング表示制御
-        function showLoading(show) {
-            document.getElementById('loadingDiv').style.display = show ? 'block' : 'none';
-        }
-
-        // エラー表示
-        function showError(message) {
-            const errorDiv = document.getElementById('errorDiv');
-            errorDiv.textContent = message;
-            errorDiv.style.display = 'block';
-        }
-
-        // エラー非表示
-        function hideError() {
-            document.getElementById('errorDiv').style.display = 'none';
-        }
-
-        // 結果なし表示
-        function showNoResults() {
-            document.getElementById('moviesContainer').innerHTML = 
-                '<div class="no-results">検索結果が見つかりませんでした。別のキーワードで試してください。</div>';
-        }
-
-        // 映画追加フォームの表示切り替え
-        function toggleAddForm() {
-            const form = document.getElementById('addMovieForm');
-            form.classList.toggle('active');
-        }
-
-        // 映画情報投稿
-        function submitMovieInfo(event) {
-            event.preventDefault();
+                </div>
+            `).join('');
             
-            const title = document.getElementById('movieTitle').value;
-            const year = document.getElementById('movieYear').value;
-            const director = document.getElementById('movieDirector').value;
-            const description = document.getElementById('movieDescription').value;
-            const submitter = document.getElementById('submitterName').value || '匿名';
+            resultsDiv.innerHTML = moviesHTML;
+        }
+
+        // 恐怖要素でフィルタリング
+        function filterMovies() {
+            if (selectedPhobias.length === 0) {
+                displayMovies(movieDatabase);
+                return;
+            }
             
-            const selectedPhobias = Array.from(document.querySelectorAll('input
+            const filtered = movieDatabase.filter(movie => 
+                selectedPhobias.some(phobia => movie.phobias.includes(phobia))
+            );
+            displayMovies(filtered);
+        }
+
+        // 映画追加フォーム送信
+        document.getElementById('addMovieForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('movieTitle').value.trim();
+            const year = document.getElementById('releaseYear').value;
+            const description = document.getElementById('movieDescription').value.trim();
+            const submitter = document.getElementById('submitterName').value.trim() || '匿名';
+            
+            if (!title || selectedPhobiasForAdd.length === 0) {
+                alert('映画タイトルと恐怖要素は必須です');
+                return;
+            }
+            
+            // 新しい映画データを追加
+            const newMovie = {
+                title: title,
+                year: year ? parseInt(year) : null,
+                phobias: [...selectedPhobiasForAdd],
+                description: description || '詳細情報なし',
+                poster: null,
+                submitter: submitter
+            };
+            
+            movieDatabase.push(newMovie);
+            
+            // フォームをリセット
+            document.getElementById('addMovieForm').reset();
+            selectedPhobiasForAdd = [];
+            document.querySelectorAll('#addMoviePhobias .phobia-item').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            alert('映画情報が追加されました！ご協力ありがとうございます。');
+            
+            // 検索結果を更新
+            if (document.getElementById('movieSearchInput').value) {
+                searchMovies();
+            } else {
+                displayMovies(movieDatabase);
+            }
+        });
+
+        // エンターキーで検索
+        document.getElementById('movieSearchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchMovies();
+            }
+        });
+
+        // 初期表示
+        displayMovies(movieDatabase);
+    </script>
+
+    <!-- Google AdSense用スクリプト（実際の運用時に追加） -->
+    <!-- 
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXX" crossorigin="anonymous"></script>
+    -->
+</body>
+</html>
