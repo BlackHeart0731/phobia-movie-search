@@ -386,26 +386,368 @@
         
         // サンプルデータ（実際の運用では外部データベースを使用）
         let movieDatabase = [
+            // ホラー映画
             {
                 title: "IT イット",
                 year: 2017,
-                phobias: ["ピエロ", "血液描写", "暗所", "その他"],
-                description: "ピエロの恐怖シーンが多数あります",
-                poster: null
+                phobias: ["ピエロ", "血液描写", "暗所", "幽霊・超常現象"],
+                description: "ピエロの恐怖シーンが多数あります。下水道などの暗い場所でのシーンもあり。"
+            },
+            {
+                title: "IT Chapter Two",
+                year: 2019,
+                phobias: ["ピエロ", "血液描写", "暗所", "幽霊・超常現象"],
+                description: "続編もピエロ恐怖症の方は注意が必要です。"
             },
             {
                 title: "ジョーズ",
                 year: 1975,
                 phobias: ["水・溺水", "血液描写"],
-                description: "海でのサメ襲撃シーンがあります",
-                poster: null
+                description: "海でのサメ襲撃シーンがあります。水中や海での恐怖シーン多数。"
+            },
+            {
+                title: "ジョーズ2",
+                year: 1978,
+                phobias: ["水・溺水", "血液描写"],
+                description: "前作同様、海での恐怖シーンが続きます。"
             },
             {
                 title: "アラクノフォビア",
                 year: 1990,
                 phobias: ["蜘蛛", "昆虫"],
-                description: "蜘蛛が大量に出現するシーンがあります",
-                poster: null
+                description: "蜘蛛が大量に出現するシーンがあります。蜘蛛恐怖症の方は絶対に避けてください。"
+            },
+            {
+                title: "エイト・レッグド・フリークス",
+                year: 2002,
+                phobias: ["蜘蛛", "昆虫"],
+                description: "巨大化した蜘蛛が登場するB級ホラー映画。"
+            },
+            {
+                title: "The Descent",
+                year: 2005,
+                phobias: ["閉所", "暗所", "血液描写"],
+                description: "洞窟内での閉塞感と暗闇が続きます。閉所恐怖症の方は注意。"
+            },
+            {
+                title: "SAW ソウ",
+                year: 2004,
+                phobias: ["閉所", "血液描写", "注射・先端"],
+                description: "密室での監禁、医療器具を使った拷問シーンがあります。"
+            },
+            {
+                title: "SAW II",
+                year: 2005,
+                phobias: ["閉所", "血液描写", "注射・先端"],
+                description: "注射器の恐怖シーンが特に印象的。閉所での恐怖も継続。"
+            },
+            {
+                title: "The Ring",
+                year: 2002,
+                phobias: ["幽霊・超常現象", "暗所"],
+                description: "貞子による超常現象的な恐怖。暗い場所でのシーンが多い。"
+            },
+            {
+                title: "The Grudge 呪怨",
+                year: 2004,
+                phobias: ["幽霊・超常現象", "暗所"],
+                description: "日本発の呪いをテーマにした超常現象ホラー。"
+            },
+            {
+                title: "死霊のはらわた",
+                year: 1981,
+                phobias: ["血液描写", "暗所", "幽霊・超常現象"],
+                description: "大量の血液描写と超常現象的な恐怖シーン。"
+            },
+            {
+                title: "ハロウィン",
+                year: 1978,
+                phobias: ["暗所", "血液描写"],
+                description: "夜間の暗闇での恐怖シーンが中心。"
+            },
+            {
+                title: "13日の金曜日",
+                year: 1980,
+                phobias: ["血液描写", "暗所", "水・溺水"],
+                description: "キャンプ場での連続殺人事件。湖でのシーンもあり。"
+            },
+            {
+                title: "エルム街の悪夢",
+                year: 1984,
+                phobias: ["血液描写", "暗所", "その他"],
+                description: "夢の中での恐怖体験。フレディの特殊メイクも恐怖要素。"
+            },
+            
+            // アクション・スリラー
+            {
+                title: "ミッション:インポッシブル",
+                year: 1996,
+                phobias: ["高所"],
+                description: "有名なCIAラングレー侵入シーンでの高所恐怖要素。"
+            },
+            {
+                title: "ミッション:インポッシブル/ゴースト・プロトコル",
+                year: 2011,
+                phobias: ["高所"],
+                description: "ブルジュ・ハリファでのスタントシーン。高所恐怖症には厳しい。"
+            },
+            {
+                title: "バーティゴ",
+                year: 1958,
+                phobias: ["高所"],
+                description: "ヒッチコック監督作品。高所恐怖症がテーマの一つ。"
+            },
+            {
+                title: "クリフハンガー",
+                year: 1993,
+                phobias: ["高所"],
+                description: "山岳でのアクションシーン。高所での恐怖シーンが連続。"
+            },
+            {
+                title: "ダイ・ハード",
+                year: 1988,
+                phobias: ["高所", "閉所"],
+                description: "高層ビル内での閉塞感とベランダでの高所シーン。"
+            },
+            {
+                title: "バーティカル・リミット",
+                year: 2000,
+                phobias: ["高所", "閉所"],
+                description: "K2登山を舞台にした高所恐怖満載の作品。"
+            },
+            
+            // 動物パニック
+            {
+                title: "アナコンダ",
+                year: 1997,
+                phobias: ["ヘビ", "水・溺水"],
+                description: "巨大なアナコンダ（蛇）が登場。川でのシーンも多い。"
+            },
+            {
+                title: "スネーク・フライト",
+                year: 2006,
+                phobias: ["ヘビ", "閉所"],
+                description: "飛行機内に大量の蛇が出現。密閉空間での恐怖。"
+            },
+            {
+                title: "フロッグ",
+                year: 1972,
+                phobias: ["カエル", "昆虫", "ヘビ"],
+                description: "カエルを中心とした動物たちの逆襲。"
+            },
+            {
+                title: "アリ（Them!）",
+                year: 1954,
+                phobias: ["蟻", "昆虫"],
+                description: "巨大化した蟻の群れによるパニック映画。"
+            },
+            {
+                title: "スウォーム",
+                year: 1978,
+                phobias: ["昆虫"],
+                description: "キラービーの大群による恐怖。昆虫恐怖症注意。"
+            },
+            {
+                title: "バタリアン",
+                year: 1985,
+                phobias: ["昆虫", "集合体"],
+                description: "昆虫の大群シーンあり。集合体恐怖症にも注意。"
+            },
+            
+            // 海洋・水中恐怖
+            {
+                title: "オープン・ウォーター",
+                year: 2003,
+                phobias: ["水・溺水"],
+                description: "大海原に取り残される恐怖。水恐怖症には厳しい内容。"
+            },
+            {
+                title: "パーフェクト ストーム",
+                year: 2000,
+                phobias: ["水・溺水", "雷"],
+                description: "嵐の海での遭難。雷と高波のシーンが印象的。"
+            },
+            {
+                title: "タイタニック",
+                year: 1997,
+                phobias: ["水・溺水", "閉所"],
+                description: "沈没シーンでの水中恐怖と船内の閉塞感。"
+            },
+            {
+                title: "ポセイドン",
+                year: 2006,
+                phobias: ["水・溺水", "閉所"],
+                description: "転覆した豪華客船内での水没恐怖。"
+            },
+            {
+                title: "アビス",
+                year: 1989,
+                phobias: ["水・溺水", "閉所", "暗所"],
+                description: "深海での閉塞感と暗闇、水中シーンが長時間続く。"
+            },
+            
+            // 医療・注射恐怖
+            {
+                title: "Re-Animator",
+                year: 1985,
+                phobias: ["注射・先端", "血液描写"],
+                description: "医療器具を使った恐怖シーン。注射シーンあり。"
+            },
+            {
+                title: "デッドアライブ",
+                year: 1992,
+                phobias: ["血液描写", "注射・先端"],
+                description: "医療シーンでの注射と大量の血液描写。"
+            },
+            {
+                title: "ホステル",
+                year: 2005,
+                phobias: ["血液描写", "注射・先端"],
+                description: "拷問シーンで医療器具が使用される。"
+            },
+            
+            // 嘔吐・病気
+            {
+                title: "エクソシスト",
+                year: 1973,
+                phobias: ["嘔吐", "幽霊・超常現象"],
+                description: "有名な嘔吐シーンがあります。悪魔憑きの超常現象も。"
+            },
+            {
+                title: "フライ",
+                year: 1986,
+                phobias: ["嘔吐", "昆虫"],
+                description: "人間がハエに変身する過程で嘔吐シーンあり。"
+            },
+            {
+                title: "コンテイジョン",
+                year: 2011,
+                phobias: ["嘔吐"],
+                description: "感染症による嘔吐シーンが複数回登場。"
+            },
+            
+            // 雷・天災
+            {
+                title: "ツイスター",
+                year: 1996,
+                phobias: ["雷"],
+                description: "竜巻と共に雷のシーンが頻繁に登場。"
+            },
+            {
+                title: "インデペンデンス・デイ",
+                year: 1996,
+                phobias: ["雷"],
+                description: "宇宙船からの攻撃で雷のような光線が多用される。"
+            },
+            
+            // 集合体恐怖
+            {
+                title: "マトリックス",
+                year: 1999,
+                phobias: ["集合体"],
+                description: "機械の触手が密集するシーンあり。"
+            },
+            {
+                title: "エイリアン",
+                year: 1979,
+                phobias: ["集合体", "暗所"],
+                description: "エイリアンの卵が大量に並ぶシーン。"
+            },
+            {
+                title: "ミスト",
+                year: 2007,
+                phobias: ["昆虫", "集合体"],
+                description: "異次元生物の群れが集合体恐怖を引き起こす。"
+            },
+            
+            // 蝶恐怖
+            {
+                title: "羊たちの沈黙",
+                year: 1991,
+                phobias: ["蝶", "死体"],
+                description: "死人の口に蛾（蝶の仲間）を入れるシーン。死体描写も。"
+            },
+            {
+                title: "モスマン",
+                year: 2002,
+                phobias: ["蝶", "幽霊・超常現象"],
+                description: "蛾のような未確認生物が登場。超常現象的要素も。"
+            },
+            
+            // 死体・ゾンビ
+            {
+                title: "ナイト・オブ・ザ・リビングデッド",
+                year: 1968,
+                phobias: ["死体", "血液描写"],
+                description: "ゾンビ映画の古典。死体の描写が多数。"
+            },
+            {
+                title: "ドーン・オブ・ザ・デッド",
+                year: 2004,
+                phobias: ["死体", "血液描写"],
+                description: "ゾンビ映画リメイク版。死体と血液描写が激しい。"
+            },
+            {
+                title: "28日後...",
+                year: 2002,
+                phobias: ["死体", "血液描写"],
+                description: "感染者による死体描写と血液シーンが多い。"
+            },
+            {
+                title: "ショーン・オブ・ザ・デッド",
+                year: 2004,
+                phobias: ["死体", "血液描写"],
+                description: "コメディ要素もあるが、ゾンビ映画なので死体描写あり。"
+            },
+            
+            // アドベンチャー・その他
+            {
+                title: "インディ・ジョーンズ/魔宮の伝説",
+                year: 1984,
+                phobias: ["昆虫", "ヘビ", "暗所"],
+                description: "地下神殿での昆虫と蛇のシーン。暗い洞窟内でのアクション。"
+            },
+            {
+                title: "キング・コング",
+                year: 2005,
+                phobias: ["昆虫", "高所"],
+                description: "巨大昆虫との戦闘シーンと高所でのアクション。"
+            },
+            {
+                title: "ロード・オブ・ザ・リング",
+                year: 2001,
+                phobias: ["蜘蛛", "暗所", "高所"],
+                description: "シェロブ（巨大蜘蛛）登場。暗い洞窟や高い場所でのシーン。"
+            },
+            {
+                title: "ハリー・ポッターと秘密の部屋",
+                year: 2002,
+                phobias: ["蜘蛛", "ヘビ"],
+                description: "アラゴグ（巨大蜘蛛）とバジリスク（大蛇）が登場。"
+            },
+            {
+                title: "スパイダーマン",
+                year: 2002,
+                phobias: ["蜘蛛", "高所"],
+                description: "蜘蛛に噛まれるシーンと高層ビル間でのアクション。"
+            },
+            {
+                title: "ダークナイト",
+                year: 2008,
+                phobias: ["高所", "暗所"],
+                description: "高層ビルでのシーンと暗い場所でのバットマンのアクション。"
+            },
+            {
+                title: "ファインディング・ニモ",
+                year: 2003,
+                phobias: ["水・溺水"],
+                description: "海中が舞台なので水中シーンが全編に渡る。ただし明るい内容。"
+            },
+            {
+                title: "アクアマン",
+                year: 2018,
+                phobias: ["水・溺水"],
+                description: "海中でのアクションが中心。水中恐怖症の方は注意。"
             }
         ];
 
@@ -445,7 +787,7 @@
         async function searchMovies() {
             const query = document.getElementById('movieSearchInput').value.trim();
             if (!query) {
-                displayMovies(movieDatabase);
+                document.getElementById('movieResults').innerHTML = '<div class="no-results">🔍 映画タイトルを入力して検索してください</div>';
                 return;
             }
 
@@ -458,7 +800,7 @@
                 );
                 const data = await response.json();
                 
-                // TMDB結果とローカルデータベースをマージ
+                // TMDB結果とローカルデータベースをマージ（検索結果のみ）
                 const mergedResults = mergeMovieData(data.results);
                 displayMovies(mergedResults);
             } catch (error) {
@@ -467,11 +809,11 @@
             }
         }
 
-        // TMDB結果とローカルデータベースをマージ
+        // TMDB結果とローカルデータベースをマージ（検索結果のみ）
         function mergeMovieData(tmdbResults) {
             const merged = [];
             
-            // TMDBの結果を処理
+            // TMDBの結果のみを処理（ローカルデータベースの情報で補完）
             tmdbResults.forEach(movie => {
                 const localData = movieDatabase.find(local => 
                     local.title.toLowerCase() === movie.title.toLowerCase() ||
@@ -486,14 +828,6 @@
                     poster: movie.poster_path ? `https://image.tmdb.org/t/p/w300${movie.poster_path}` : null,
                     overview: movie.overview
                 });
-            });
-            
-            // ローカルデータベースの映画で、TMDBにないものを追加
-            movieDatabase.forEach(local => {
-                const exists = merged.find(m => m.title.toLowerCase() === local.title.toLowerCase());
-                if (!exists) {
-                    merged.push(local);
-                }
             });
             
             return merged;
@@ -531,17 +865,16 @@
             resultsDiv.innerHTML = moviesHTML;
         }
 
-        // 恐怖要素でフィルタリング
+        // 恐怖要素でフィルタリング（検索結果から）
         function filterMovies() {
-            if (selectedPhobias.length === 0) {
-                displayMovies(movieDatabase);
+            const query = document.getElementById('movieSearchInput').value.trim();
+            if (!query) {
+                document.getElementById('movieResults').innerHTML = '<div class="no-results">🔍 映画タイトルを入力して検索してください</div>';
                 return;
             }
             
-            const filtered = movieDatabase.filter(movie => 
-                selectedPhobias.some(phobia => movie.phobias.includes(phobia))
-            );
-            displayMovies(filtered);
+            // 現在表示されている検索結果から恐怖要素でフィルタリング
+            searchMovies();
         }
 
         // 映画追加フォーム送信
@@ -580,11 +913,7 @@
             alert('映画情報が追加されました！ご協力ありがとうございます。');
             
             // 検索結果を更新
-            if (document.getElementById('movieSearchInput').value) {
-                searchMovies();
-            } else {
-                displayMovies(movieDatabase);
-            }
+            searchMovies();
         });
 
         // エンターキーで検索
@@ -594,8 +923,8 @@
             }
         });
 
-        // 初期表示
-        displayMovies(movieDatabase);
+        // 初期表示（検索待ち状態）
+        document.getElementById('movieResults').innerHTML = '<div class="no-results">🔍 映画タイトルを入力して検索してください</div>';
     </script>
 
     <!-- Google AdSense用スクリプト（実際の運用時に追加） -->
