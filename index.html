@@ -615,7 +615,22 @@
 
             saveMovieDatabase();
             
-            alert('映画情報が追加されました！');
+            // 追加した映画を検索結果に表示するため、カスタム映画カードを作成
+            const customMovie = {
+                id: movieId,
+                title: title,
+                overview: overview,
+                poster_path: null,
+                vote_average: 0,
+                release_date: year || ''
+            };
+
+            // 検索結果エリアに追加
+            const resultsSection = document.getElementById('resultsSection');
+            const movieCard = createMovieCard(customMovie);
+            resultsSection.insertBefore(movieCard, resultsSection.firstChild);
+            
+            alert('映画情報が追加されました！検索結果の一番上に表示されています。');
             this.reset();
             // その他の入力欄を非表示に戻す
             document.getElementById('otherPhobiaGroup').style.display = 'none';
@@ -638,15 +653,39 @@
             document.getElementById('errorDiv').style.display = 'none';
         }
 
-        // データベース保存（メモリ内のみ）
+        // データベース保存（ローカルストレージ使用）
         function saveMovieDatabase() {
-            // 実際の実装では、ここでサーバーにデータを送信します
-            console.log('映画データベースが更新されました:', movieDatabase);
+            // ブラウザのローカルストレージに保存
+            // 注意: Claude.ai環境では動作しないため、実際の公開時に有効になります
+            try {
+                if (typeof(Storage) !== "undefined") {
+                    localStorage.setItem('movieDatabase', JSON.stringify(movieDatabase));
+                    console.log('映画データベースが保存されました');
+                } else {
+                    console.log('ローカルストレージがサポートされていません');
+                }
+            } catch (e) {
+                console.log('データ保存エラー:', e);
+            }
         }
 
-        // データベース読み込み（サンプルデータ）
+        // データベース読み込み（ローカルストレージ + サンプルデータ）
         function loadMovieDatabase() {
-            // サンプルデータ
+            // ローカルストレージから読み込み
+            try {
+                if (typeof(Storage) !== "undefined") {
+                    const savedData = localStorage.getItem('movieDatabase');
+                    if (savedData) {
+                        movieDatabase = JSON.parse(savedData);
+                        console.log('保存された映画データを読み込みました');
+                        return;
+                    }
+                }
+            } catch (e) {
+                console.log('データ読み込みエラー:', e);
+            }
+
+            // 初回またはエラー時はサンプルデータ
             movieDatabase = {
                 '27205': { // Silent Hill
                     phobias: ['暗所', '血液描写', '幽霊・超常現象'],
