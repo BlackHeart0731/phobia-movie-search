@@ -55,7 +55,12 @@
       color: white;
       margin-top: 2em;
     }
-    #results img {
+    .movie-result {
+      margin-bottom: 2em;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 1em;
+    }
+    .movie-result img {
       max-width: 100%;
       border-radius: 8px;
     }
@@ -88,18 +93,23 @@
       resultsDiv.innerHTML = '';
 
       if (data.results && data.results.length > 0) {
-        const movie = data.results[0];
-        resultsDiv.innerHTML = `
-          <h2>${movie.title}</h2>
-          <p>${movie.overview || '説明が見つかりませんでした。'}</p>
-          <p>公開日: ${movie.release_date}</p>
-          <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title} poster">
-          <div id="phobia-tags">
-            <h3>恐怖要素（登録されている場合）:</h3>
-            <ul id="phobia-list"></ul>
-          </div>
-        `;
-        loadPhobiaTags(movie.id);
+        data.results.forEach(movie => {
+          const movieDiv = document.createElement('div');
+          movieDiv.classList.add('movie-result');
+          movieDiv.innerHTML = `
+            <h2>${movie.title}</h2>
+            <p>${movie.overview || '説明が見つかりませんでした。'}</p>
+            <p>公開日: ${movie.release_date}</p>
+            <p><strong>TMDB 映画ID:</strong> ${movie.id}</p>
+            <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title} poster">
+            <div class="phobia-tags">
+              <h3>恐怖要素（登録されている場合）:</h3>
+              <ul id="phobia-list-${movie.id}"></ul>
+            </div>
+          `;
+          resultsDiv.appendChild(movieDiv);
+          loadPhobiaTags(movie.id);
+        });
       } else {
         resultsDiv.innerHTML = '<p>該当する映画が見つかりませんでした。</p>';
       }
@@ -111,7 +121,7 @@
         67890: ["蜘蛛", "昆虫", "集合体"]
       };
       const phobias = dummyTags[movieId] || ["恐怖要素未登録"];
-      const ul = document.getElementById('phobia-list');
+      const ul = document.getElementById(`phobia-list-${movieId}`);
       ul.innerHTML = '';
       phobias.forEach(phobia => {
         const li = document.createElement('li');
@@ -139,7 +149,8 @@
       <h2>恐怖要素の新規登録フォーム</h2>
       <form action="#" method="POST">
         <label>映画タイトル: <input type="text" name="title" required></label><br>
-        <label>TMDB 映画ID: <input type="text" name="movie_id" required></label><br>
+        <label>TMDB 映画ID: <input type="text" name="movie_id"></label>
+        <p style="font-size: 0.9em; color: #555;">※映画IDが不明な場合は、上の検索欄で映画を検索するとIDが表示されます。</p><br>
         <label>該当する恐怖要素:</label><br>
         <div>
           <label><input type="checkbox" name="phobias" value="高所"> 高所</label>
