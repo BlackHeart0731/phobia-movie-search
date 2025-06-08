@@ -3,12 +3,85 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>恐怖症フレンドリー映画検索</title>
+  <title>恐怖症映画検索</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: linear-gradient(to bottom, #e0f7fa, #fff);
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #006064;
+      color: white;
+      padding: 1em;
+      text-align: center;
+    }
+    main {
+      padding: 2em;
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    section {
+      margin-bottom: 2em;
+    }
+    input[type="text"] {
+      width: 70%;
+      padding: 0.5em;
+      margin: 0.5em 0;
+      font-size: 1em;
+    }
+    button {
+      padding: 0.5em 1em;
+      font-size: 1em;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #004d40;
+    }
+    footer {
+      text-align: center;
+      padding: 2em;
+      background-color: #004d40;
+      color: white;
+      margin-top: 2em;
+    }
+    #results img {
+      max-width: 100%;
+      border-radius: 8px;
+    }
+    #phobia-tags ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    #phobia-tags li {
+      display: inline-block;
+      background: #ffe082;
+      padding: 0.4em 0.8em;
+      margin: 0.3em;
+      border-radius: 20px;
+      font-size: 0.9em;
+    }
+    form div label {
+      display: inline-block;
+      margin-right: 1em;
+      margin-bottom: 0.3em;
+    }
+  </style>
   <script>
     async function searchMovie() {
       const title = document.getElementById('movie-title').value;
       const apiKey = '9c5b6fe18f36543b858effdaf87e44e0';
-      const response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(title)}`);
+      const response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(title)}&language=ja`);
       const data = await response.json();
 
       const resultsDiv = document.getElementById('results');
@@ -18,7 +91,7 @@
         const movie = data.results[0];
         resultsDiv.innerHTML = `
           <h2>${movie.title}</h2>
-          <p>${movie.overview}</p>
+          <p>${movie.overview || '説明が見つかりませんでした。'}</p>
           <p>公開日: ${movie.release_date}</p>
           <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title} poster">
           <div id="phobia-tags">
@@ -26,7 +99,6 @@
             <ul id="phobia-list"></ul>
           </div>
         `;
-        // 恐怖タグの取得（仮のデータベース想定）
         loadPhobiaTags(movie.id);
       } else {
         resultsDiv.innerHTML = '<p>該当する映画が見つかりませんでした。</p>';
@@ -34,7 +106,6 @@
     }
 
     function loadPhobiaTags(movieId) {
-      // ダミーで登録された恐怖タグを表示（本番ではデータベース連携）
       const dummyTags = {
         12345: ["高所", "血液描写", "死体"],
         67890: ["蜘蛛", "昆虫", "集合体"]
@@ -52,13 +123,13 @@
 </head>
 <body>
   <header>
-    <h1>恐怖症フレンドリー映画検索</h1>
-    <p>あなたの恐怖症に配慮した映画選びをサポートします。</p>
+    <h1>恐怖症映画検索</h1>
+    <p>安心して映画を観るために</p>
   </header>
 
   <main>
     <section>
-      <label for="movie-title">映画タイトルを入力:</label>
+      <label for="movie-title">映画タイトルを入力:</label><br>
       <input type="text" id="movie-title">
       <button onclick="searchMovie()">検索</button>
     </section>
