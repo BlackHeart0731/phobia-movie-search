@@ -626,13 +626,31 @@
         let phobiaData = {};
         let currentCategory = 'upcoming';
 
+        // モーダル開閉機能
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // モーダル外クリックで閉じる
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
         // 初期化
         document.addEventListener('DOMContentLoaded', function() {
             loadCategory('upcoming');
             initializePhobiaData();
             
             // AdSense初期化
-            (adsbygoogle = window.adsbygoogle || []).push({});
+            if (typeof adsbygoogle !== 'undefined') {
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            }
         });
 
         // サンプル恐怖症データを初期化
@@ -655,6 +673,45 @@
             });
         }
 
+        // ローディング表示
+        function showLoading() {
+            document.getElementById('moviesContainer').innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>映画情報を読み込み中...</p>
+                </div>
+            `;
+        }
+
+        // 映画検索機能
+        async function searchMovies() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) {
+                alert('映画タイトルを入力してください');
+                return;
+            }
+
+            showLoading();
+            
+            try {
+                const response = await fetch(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}&language=ja-JP`);
+                const data = await response.json();
+                displayMovies(data.results);
+            } catch (error) {
+                console.error('Error searching movies:', error);
+                document.getElementById('moviesContainer').innerHTML = '<p>検索エラーが発生しました。しばらく後でお試しください。</p>';
+            }
+        }
+
+        // エンターキーで検索
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchMovies();
+                }
+            });
+        });
+
         // カテゴリ読み込み
         async function loadCategory(category) {
             currentCategory = category;
@@ -663,9 +720,162 @@
             document.querySelectorAll('.category-tab').forEach(tab => {
                 tab.classList.remove('active');
             });
-            event.target.classList.add('active');
+            
+            // イベントターゲットがある場合のみアクティブクラスを追加
+            if (event && event.target) {
+                event.target.classList.add('active');
+            } else {
+                // 初期読み込み時は最初のタブをアクティブに
+                document.querySelector('.category-tab').classList.add('active');
+            }
             
             showLoading();
             
             try {
-                const response = await fetch(`${BASE_URL}/movie
+                const response = await fetch(`${BASE_URL}/movie/${category}?api_key=${API_KEY}&language=ja-JP&page=1`);
+                const data = await response.json();
+                displayMovies(data.results);
+            } catch (error) {
+                console.error('Error loading category:', error);
+                document.getElementById('moviesContainer').innerHTML = '<p>映画情報の読み込みエラーが発生しました。</p>';
+            }
+        }
+
+        // 映画一覧表示
+        function displayMovies(movies) {
+            const container = document.getElementById('moviesContainer');
+            if (!movies || movies.length === 0) {
+                container.innerHTML = '<p>映画が見つかりませんでした。</p>';
+                return;
+            }
+
+            const moviesHTML = movies.slice(0, 20).map(movie => {
+                const phobias = phobiaData[movie.id] || [];
+                const phobiaTagsHTML = phobias.map(phobia => 
+                    `<span class="phobia-tag">${phobia}</span>`
+                ).join('');
+                
+                const posterUrl = movie.poster_path 
+                    ? `${IMAGE_BASE_URL}${movie.poster_path}` 
+                    : null;
+
+                return `
+                    <div class="movie-card" onclick="showMovieDetails(${movie.id})">
+                        <div class="movie-poster">
+                            ${posterUrl 
+                                ? `<img src="${posterUrl}" alt="${movie.title}" style="width: 100%; height: 100%; object-fit: cover;">` 
+                                : '🎬 ポスター準備中'
+                            }
+                        </div>
+                        <div class="movie-info">
+                            <div class="movie-title">${movie.title || movie.original_title}</div>
+                            <div class="movie-year">${movie.release_date ? new Date(movie.release_date).getFullYear() : '年不明'}</div>
+                            <div class="phobia-tags">
+                                ${phobiaTagsHTML || '<span style="color: #999;">恐怖要素未登録</span>'}
+                            </div>
+                            <div class="rating">
+                                ⭐ ${movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A'}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = moviesHTML;
+        }
+
+        // 映画詳細表示
+        async function showMovieDetails(movieId) {
+            try {
+                const response = await fetch(`${BASE_URL}/movie/${movieId}?api_key=${API_KEY}&language=ja-JP`);
+                const movie = await response.json();
+                
+                const phobias = phobiaData[movieId] || [];
+                const phobiaTagsHTML = phobias.map(phobia => 
+                    `<span class="phobia-tag">${phobia}</span>`
+                ).join('');
+
+                const posterUrl = movie.poster_path 
+                    ? `${IMAGE_BASE_URL}${movie.poster_path}` 
+                    : null;
+
+                document.getElementById('movieDetails').innerHTML = `
+                    <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 300px;">
+                            ${posterUrl 
+                                ? `<img src="${posterUrl}" alt="${movie.title}" style="width: 100%; max-width: 300px; border-radius: 10px;">` 
+                                : '<div style="width: 300px; height: 450px; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; border-radius: 10px; color: white; font-size: 1.2rem;">🎬 ポスター準備中</div>'
+                            }
+                        </div>
+                        <div style="flex: 2; min-width: 300px;">
+                            <h2 style="color: #667eea; margin-bottom: 1rem;">${movie.title}</h2>
+                            <p style="margin-bottom: 1rem;"><strong>公開日:</strong> ${movie.release_date || '不明'}</p>
+                            <p style="margin-bottom: 1rem;"><strong>評価:</strong> ⭐ ${movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A'}</p>
+                            <p style="margin-bottom: 1rem;"><strong>あらすじ:</strong></p>
+                            <p style="line-height: 1.6; margin-bottom: 2rem;">${movie.overview || '情報がありません'}</p>
+                            
+                            <h3 style="color: #667eea; margin-bottom: 1rem;">恐怖要素</h3>
+                            <div style="margin-bottom: 2rem;">
+                                ${phobiaTagsHTML || '<span style="color: #999;">未登録</span>'}
+                            </div>
+                            
+                            <button class="submit-btn" onclick="openEditModal(${movieId})" style="width: auto; padding: 0.8rem 2rem;">
+                                恐怖要素を編集
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                openModal('movieModal');
+            } catch (error) {
+                console.error('Error loading movie details:', error);
+                alert('映画詳細の読み込みに失敗しました。');
+            }
+        }
+
+        // 恐怖要素編集モーダルを開く
+        async function openEditModal(movieId) {
+            currentEditingMovie = movieId;
+            
+            try {
+                const response = await fetch(`${BASE_URL}/movie/${movieId}?api_key=${API_KEY}&language=ja-JP`);
+                const movie = await response.json();
+                
+                document.getElementById('editMovieInfo').innerHTML = `
+                    <h3 style="margin-bottom: 1rem;">${movie.title}</h3>
+                    <p style="margin-bottom: 2rem; color: #666;">以下の恐怖要素にチェックを入れてください</p>
+                `;
+                
+                // 現在の恐怖要素を反映
+                const currentPhobias = phobiaData[movieId] || [];
+                document.querySelectorAll('input[name="phobia"]').forEach(checkbox => {
+                    checkbox.checked = currentPhobias.includes(checkbox.value);
+                });
+                
+                closeModal('movieModal');
+                openModal('editModal');
+            } catch (error) {
+                console.error('Error loading movie for edit:', error);
+                alert('映画情報の読み込みに失敗しました。');
+            }
+        }
+
+        // 恐怖要素データを保存
+        function savePhobiaData() {
+            if (!currentEditingMovie) return;
+            
+            const selectedPhobias = [];
+            document.querySelectorAll('input[name="phobia"]:checked').forEach(checkbox => {
+                selectedPhobias.push(checkbox.value);
+            });
+            
+            phobiaData[currentEditingMovie] = selectedPhobias;
+            
+            alert('恐怖要素情報を保存しました！\n（実際のサイトでは、この情報がデータベースに保存されます）');
+            closeModal('editModal');
+            
+            // 表示を更新
+            if (currentCategory) {
+                loadCategory(currentCategory);
+            }
+        }
