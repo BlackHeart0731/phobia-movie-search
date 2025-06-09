@@ -1,11 +1,5 @@
-// Main site setup for "ファビアチェック"
-import React, { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useEffect } from "react";
+// FabiaCheck - React App for Phobia-Aware Movie Search
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const TMDB_API_KEY = "9c5b6fe18f36543b858effdaf87e44e0";
@@ -20,82 +14,67 @@ const PHOBIA_TAGS = [
 export default function FabiaCheck() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
-  const [popup, setPopup] = useState(false);
 
   const handleSearch = async () => {
-    const res = await axios.get(
-      `${TMDB_BASE_URL}/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}`
-    );
-    setResults(res.data.results);
+    try {
+      const res = await axios.get(
+        `${TMDB_BASE_URL}/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}`
+      );
+      setResults(res.data.results);
+    } catch (error) {
+      console.error("検索エラー:", error);
+    }
   };
 
-  useEffect(() => {
-    // preload default categories if needed
-  }, []);
-
   return (
-    <div className="p-4 space-y-6 bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 min-h-screen">
+    <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 p-6 space-y-6">
       {/* Google AdSense */}
       <div dangerouslySetInnerHTML={{
         __html: `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1387560637754446" crossorigin="anonymous"></script>`
       }} />
 
       {/* Header */}
-      <header className="text-center text-4xl font-bold text-pink-700">ファビアチェック</header>
-      <p className="text-center text-sm text-gray-600">ファビオ（恐怖症）要素のある映画を事前チェック</p>
+      <header className="text-center">
+        <h1 className="text-4xl font-bold text-pink-700">ファビアチェック</h1>
+        <p className="text-sm text-gray-700">ファビオ（恐怖症）要素のある映画を事前チェック</p>
+      </header>
 
-      {/* Site Info and Disclaimer */}
-      <div className="flex justify-center gap-4">
-        <Dialog>
-          <DialogTrigger><Button>サイト説明</Button></DialogTrigger>
-          <DialogContent>
-            <p>このサイトでは、恐怖症（ファビオ）を持つ方が映画を見る前に恐怖要素をチェックできます。</p>
-          </DialogContent>
-        </Dialog>
-        <Dialog>
-          <DialogTrigger><Button>免責事項</Button></DialogTrigger>
-          <DialogContent>
-            <p>情報はユーザー提供によるもので、正確性を保証するものではありません。自己責任でご利用ください。</p>
-          </DialogContent>
-        </Dialog>
-      </div>
-
-      {/* Search */}
-      <div className="flex justify-center gap-2">
-        <Input
+      {/* Search Bar */}
+      <div className="flex justify-center items-center gap-2">
+        <input
+          className="border border-gray-300 rounded px-3 py-2 w-full max-w-sm"
           placeholder="映画タイトルを検索"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
-        <Button onClick={handleSearch}>検索</Button>
+        <button
+          onClick={handleSearch}
+          className="bg-pink-500 text-white rounded px-4 py-2 hover:bg-pink-600"
+        >
+          検索
+        </button>
       </div>
 
       {/* Results */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {results.map((movie) => (
-          <Card key={movie.id} className="hover:shadow-xl transition">
-            <CardContent className="p-2">
-              <img src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`} alt={movie.title} className="rounded-lg" />
-              <div className="text-lg font-semibold mt-2">{movie.title}</div>
-              <div className="text-sm text-gray-600">{movie.release_date}</div>
-              {/* Placeholder for phobia tags + user input */}
-              <div className="mt-2 text-sm">恐怖要素: 未登録</div>
-              <Button className="mt-2 w-full" variant="outline">要素を追加/修正</Button>
-            </CardContent>
-          </Card>
+          <div key={movie.id} className="bg-white rounded-lg shadow p-4">
+            {movie.poster_path && (
+              <img
+                src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
+                alt={movie.title}
+                className="rounded mb-2"
+              />
+            )}
+            <h2 className="text-lg font-semibold">{movie.title}</h2>
+            <p className="text-sm text-gray-500">{movie.release_date}</p>
+            <p className="text-sm mt-2">恐怖要素: <span className="text-gray-600">未登録</span></p>
+            <button className="mt-2 w-full border rounded py-1 hover:bg-gray-100">
+              要素を追加/修正
+            </button>
+          </div>
         ))}
       </div>
-
-      {/* Placeholder Tabs */}
-      <Tabs defaultValue="now_playing">
-        <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-2">
-          <TabsTrigger value="upcoming">公開予定の映画</TabsTrigger>
-          <TabsTrigger value="now_playing">上映中の映画</TabsTrigger>
-          <TabsTrigger value="popular">話題の映画</TabsTrigger>
-          <TabsTrigger value="top_rated">評価の高い映画</TabsTrigger>
-        </TabsList>
-        {/* You'd add matching <TabsContent /> for each tab with similar fetching logic as handleSearch */}
-      </Tabs>
     </div>
   );
 }
