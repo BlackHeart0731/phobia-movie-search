@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ファビアチェック - 恐怖症対応映画検索サイト</title>
+    <title>ファビアチェック - 恐怖症の方のための映画情報サイト</title>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1387560637754446" crossorigin="anonymous"></script>
     <style>
         * {
@@ -13,337 +13,403 @@
         }
 
         body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Hiragino Sans', 'Yu Gothic', sans-serif;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
             min-height: 100vh;
             color: #333;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        header {
-            text-align: center;
-            margin-bottom: 40px;
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
             background: rgba(255, 255, 255, 0.95);
-            padding: 30px 20px;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            min-height: 100vh;
+            box-shadow: 0 0 30px rgba(0,0,0,0.1);
             backdrop-filter: blur(10px);
         }
 
+        header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
         .logo {
-            font-size: 3rem;
+            font-size: 2.2rem;
             font-weight: bold;
             background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 10px;
-        }
-
-        .tagline {
-            font-size: 1.1rem;
-            color: #666;
-            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
         .nav-buttons {
             display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         .nav-btn {
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            background: rgba(255,255,255,0.2);
             color: white;
             border: none;
-            padding: 12px 24px;
+            padding: 0.8rem 1.5rem;
             border-radius: 25px;
             cursor: pointer;
-            font-weight: bold;
             transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
         }
 
         .nav-btn:hover {
+            background: rgba(255,255,255,0.3);
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
         .search-section {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
+            padding: 2rem;
+            text-align: center;
+            background: rgba(255,255,255,0.8);
+            margin: 2rem;
             border-radius: 20px;
-            margin-bottom: 40px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
         }
 
-        .search-box {
+        .search-container {
             display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            gap: 1rem;
         }
 
         .search-input {
             flex: 1;
-            padding: 15px 20px;
-            border: 2px solid #e0e0e0;
-            border-radius: 25px;
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 15px;
             font-size: 1rem;
-            outline: none;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .search-input:focus {
-            border-color: #4ecdc4;
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 15px rgba(102, 126, 234, 0.3);
         }
 
         .search-btn {
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
+            padding: 1rem 2rem;
+            border-radius: 15px;
             cursor: pointer;
-            font-weight: bold;
+            font-size: 1rem;
             transition: all 0.3s ease;
         }
 
         .search-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
         }
 
-        .category-selector {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 30px;
-        }
-
-        .category-btn {
-            background: rgba(255, 255, 255, 0.8);
-            border: 2px solid #e0e0e0;
-            padding: 10px 20px;
+        .category-section {
+            padding: 2rem;
+            margin: 2rem;
+            background: rgba(255,255,255,0.8);
             border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
         }
 
-        .category-btn.active {
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+        .category-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .category-tab {
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
             color: white;
-            border-color: transparent;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        .movie-grid {
+        .category-tab.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            transform: scale(1.05);
+        }
+
+        .category-tab:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        .movies-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
-            margin-bottom: 40px;
+            gap: 2rem;
+            padding: 2rem;
         }
 
         .movie-card {
-            background: rgba(255, 255, 255, 0.95);
+            background: white;
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
             cursor: pointer;
         }
 
         .movie-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.15);
         }
 
         .movie-poster {
             width: 100%;
             height: 200px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #667eea, #764ba2);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-size: 1.2rem;
-            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .movie-poster::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
         .movie-info {
-            padding: 20px;
+            padding: 1.5rem;
         }
 
         .movie-title {
             font-size: 1.3rem;
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 0.5rem;
             color: #333;
         }
 
         .movie-year {
             color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 15px;
+            margin-bottom: 1rem;
         }
 
         .phobia-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 15px;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
         }
 
         .phobia-tag {
-            background: #ffebee;
-            color: #c62828;
-            padding: 4px 8px;
-            border-radius: 12px;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
             font-size: 0.8rem;
-            border: 1px solid #ffcdd2;
+            font-weight: bold;
         }
 
-        .movie-rating {
+        .rating {
             display: flex;
             align-items: center;
-            gap: 5px;
-            color: #ff6b6b;
-            font-weight: bold;
+            gap: 0.5rem;
+            color: #f39c12;
         }
 
         .modal {
             display: none;
             position: fixed;
-            top: 0;
+            z-index: 1000;
             left: 0;
+            top: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
+            background: rgba(0,0,0,0.8);
             backdrop-filter: blur(5px);
         }
 
         .modal-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
             background: white;
-            padding: 40px;
+            margin: 5% auto;
+            padding: 2rem;
             border-radius: 20px;
-            max-width: 500px;
             width: 90%;
+            max-width: 800px;
             max-height: 80vh;
             overflow-y: auto;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
 
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .modal-title {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
+        .close {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            font-size: 2rem;
             cursor: pointer;
-            color: #666;
+            color: #999;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: #333;
         }
 
         .phobia-checklist {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
-            margin: 20px 0;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
         }
 
         .phobia-item {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: #f8f9fa;
+            border-radius: 10px;
         }
 
         .phobia-checkbox {
-            accent-color: #4ecdc4;
+            accent-color: #667eea;
         }
 
         .submit-btn {
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            background: linear-gradient(135deg, #28a745, #20c997);
             color: white;
             border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
+            padding: 1rem 2rem;
+            border-radius: 15px;
             cursor: pointer;
-            font-weight: bold;
+            font-size: 1rem;
+            transition: all 0.3s ease;
             width: 100%;
-            margin-top: 20px;
         }
 
-        .ad-container {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+        }
+
+        .ad-space {
+            background: #f8f9fa;
+            padding: 2rem;
+            margin: 2rem;
             border-radius: 15px;
-            margin: 30px 0;
             text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 2px dashed #ddd;
         }
 
         .loading {
             text-align: center;
-            padding: 50px;
-            font-size: 1.2rem;
+            padding: 2rem;
             color: #666;
         }
 
-        .no-results {
-            text-align: center;
-            padding: 50px;
-            color: #666;
-            font-size: 1.1rem;
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .search-container {
+                flex-direction: column;
+            }
+            
+            .category-tabs {
+                justify-content: center;
+            }
+            
+            .movies-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <div class="logo">ファビアチェック</div>
-            <div class="tagline">ファビア（恐怖症）に配慮した映画検索サイト</div>
-            <div class="nav-buttons">
-                <button class="nav-btn" onclick="showAbout()">サイト説明</button>
-                <button class="nav-btn" onclick="showDisclaimer()">免責事項</button>
-                <button class="nav-btn" onclick="showAddMovie()">映画情報追加</button>
+            <div class="header-content">
+                <div class="logo">🎬 ファビアチェック</div>
+                <div class="nav-buttons">
+                    <button class="nav-btn" onclick="openModal('aboutModal')">サイト説明</button>
+                    <button class="nav-btn" onclick="openModal('disclaimerModal')">免責事項</button>
+                </div>
             </div>
         </header>
 
         <div class="search-section">
-            <div class="search-box">
-                <input type="text" class="search-input" id="movieTitle" placeholder="映画タイトルを入力してください...">
-                <button class="search-btn" onclick="searchMovie()">検索</button>
-            </div>
-            
-            <div class="category-selector">
-                <button class="category-btn active" onclick="showCategory('upcoming')">公開予定の映画</button>
-                <button class="category-btn" onclick="showCategory('now_playing')">上映中の映画</button>
-                <button class="category-btn" onclick="showCategory('popular')">話題の映画</button>
-                <button class="category-btn" onclick="showCategory('top_rated')">評価の高い映画</button>
+            <h2 style="margin-bottom: 1rem; color: #333;">映画を検索して恐怖要素をチェック！</h2>
+            <div class="search-container">
+                <input type="text" class="search-input" id="searchInput" placeholder="映画タイトルを入力してください">
+                <button class="search-btn" onclick="searchMovies()">検索</button>
             </div>
         </div>
 
-        <div class="ad-container">
+        <div class="ad-space">
+            <!-- Google AdSense 広告エリア -->
             <ins class="adsbygoogle"
                  style="display:block"
                  data-ad-client="ca-pub-1387560637754446"
@@ -352,15 +418,22 @@
                  data-full-width-responsive="true"></ins>
         </div>
 
-        <div id="movieResults" class="movie-grid">
-            <div class="loading">映画情報を読み込み中...</div>
+        <div class="category-section">
+            <div class="category-tabs">
+                <button class="category-tab active" onclick="loadCategory('upcoming')">公開予定の映画</button>
+                <button class="category-tab" onclick="loadCategory('now_playing')">上映中の映画</button>
+                <button class="category-tab" onclick="loadCategory('popular')">話題の映画</button>
+                <button class="category-tab" onclick="loadCategory('top_rated')">評価の高い映画</button>
+            </div>
+            <div id="moviesContainer" class="movies-grid"></div>
         </div>
 
-        <div class="ad-container">
+        <div class="ad-space">
+            <!-- Google AdSense 広告エリア -->
             <ins class="adsbygoogle"
                  style="display:block"
                  data-ad-client="ca-pub-1387560637754446"
-                 data-ad-slot="1234567890"
+                 data-ad-slot="9876543210"
                  data-ad-format="auto"
                  data-full-width-responsive="true"></ins>
         </div>
@@ -369,211 +442,230 @@
     <!-- サイト説明モーダル -->
     <div id="aboutModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">サイト説明</h2>
-                <button class="close-btn" onclick="closeModal('aboutModal')">&times;</button>
+            <span class="close" onclick="closeModal('aboutModal')">&times;</span>
+            <h2 style="color: #667eea; margin-bottom: 1rem;">🎬 ファビアチェックについて</h2>
+            <p style="line-height: 1.8; margin-bottom: 1rem;">
+                ファビアチェックは、ファビア（恐怖症）をお持ちの方が安心して映画を楽しめるようにサポートするサイトです。
+            </p>
+            <p style="line-height: 1.8; margin-bottom: 1rem;">
+                映画を観る前に、あなたの恐怖症に関連する要素が含まれているかどうかを事前にチェックできます。
+            </p>
+            <h3 style="color: #667eea; margin: 1.5rem 0 1rem;">チェック可能な恐怖要素：</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.5rem; margin-bottom: 1rem;">
+                <span style="background: #f8f9fa; padding: 0.5rem; border-radius: 5px;">高所</span>
+                <span style="background: #f8f9fa; padding: 0.5rem; border-radius: 5px;">閉所</span>
+                <span style="background: #f8f9fa; padding: 0.5rem; border-radius: 5px;">暗所</span>
+                <span style="background: #f8f9fa; padding: 0.5rem; border-radius: 5px;">蜘蛛</span>
+                <span style="background: #f8f9fa; padding: 0.5rem; border-radius: 5px;">蝶</span>
+                <span style="background: #f8f9fa; padding: 0.5rem; border-radius: 5px;">蟻</span>
+                <span style="background: #f8f9fa; padding: 0.5rem; border-radius: 5px;">昆虫</span>
+                <span style="background: #f8f9fa; padding: 0.5rem; border-radius: 5px;">蛙</span>
+                <span style="background: #f8f9fa; padding: 0.5rem; border-radius: 5px;">ヘビ</span>
+                <span style="background: #f8f9fa; padding: 0.5rem; border-radius: 5px;">集合体</span>
+                <span style="background: #f8f9fa; padding: 0.5rem; border-radius: 5px;">血液描写</span>
+                <span style="background: #f8f9fa; padding: 0.5rem; border-radius: 5px;">水・溺水</span>
+                <span style="background: #f8f9fa; padding: 0.5rem; border-radius: 5px;">雷</span>
+                <span style="background: #f8f9fa; padding: 0.5rem; border-radius: 5px;">嘔吐</span>
+                <span style="background: #f8f9fa; padding: 0.5rem; border-radius: 5px;">注射・先端</span>
+                <span style="background: #f8f9fa; padding: 0.5rem; border-radius: 5px;">ピエロ</span>
+                <span style="background: #f8f9fa; padding: 0.5rem; border-radius: 5px;">幽霊・超常現象</span>
+                <span style="background: #f8f9fa; padding: 0.5rem; border-radius: 5px;">性的シーン</span>
+                <span style="background: #f8f9fa; padding: 0.5rem; border-radius: 5px;">死体</span>
+                <span style="background: #f8f9fa; padding: 0.5rem; border-radius: 5px;">その他</span>
             </div>
-            <div>
-                <h3>ファビアチェックへようこそ</h3>
-                <p>ファビアチェックは、ファビア（恐怖症）をお持ちの方が安心して映画を楽しめるよう支援するサイトです。</p>
-                
-                <h4>主な機能</h4>
-                <ul>
-                    <li><strong>恐怖要素の事前チェック：</strong>映画に含まれる可能性のある恐怖要素を事前に確認できます</li>
-                    <li><strong>詳細な分類：</strong>高所恐怖症、閉所恐怖症、昆虫恐怖症など、20種類の恐怖要素で分類</li>
-                    <li><strong>タイトル検索：</strong>気になる映画のタイトルで検索が可能</li>
-                    <li><strong>カテゴリ別表示：</strong>公開予定、上映中、話題作、高評価作品を選択して閲覧</li>
-                    <li><strong>コミュニティ参加：</strong>ユーザーの皆様による情報の追加・修正が可能</li>
-                </ul>
-
-                <h4>対象となる恐怖要素</h4>
-                <p>高所、閉所、暗所、蜘蛛、蝶、蟻、昆虫、蛙、ヘビ、集合体、血液描写、水・溺水、雷、嘔吐、注射・先端、ピエロ、幽霊・超常現象、性的シーン、死体、その他</p>
-
-                <h4>使い方</h4>
-                <p>1. 映画タイトルを検索するか、カテゴリから選択<br>
-                2. 映画カードをクリックして詳細情報を確認<br>
-                3. 恐怖要素タグで事前にチェック<br>
-                4. 安心して映画鑑賞をお楽しみください</p>
-            </div>
+            <p style="line-height: 1.8;">
+                皆さまからの情報提供により、より正確で詳細な恐怖要素データベースを構築しています。安心して映画を楽しんでください！
+            </p>
         </div>
     </div>
 
     <!-- 免責事項モーダル -->
     <div id="disclaimerModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">免責事項</h2>
-                <button class="close-btn" onclick="closeModal('disclaimerModal')">&times;</button>
-            </div>
-            <div>
-                <h3>重要な注意事項</h3>
+            <span class="close" onclick="closeModal('disclaimerModal')">&times;</span>
+            <h2 style="color: #667eea; margin-bottom: 1rem;">⚠️ 免責事項</h2>
+            <div style="line-height: 1.8;">
+                <h3 style="color: #333; margin: 1rem 0;">情報の正確性について</h3>
+                <p style="margin-bottom: 1rem;">
+                    本サイトで提供される恐怖要素に関する情報は、ユーザーの皆様からの投稿に基づいており、その正確性や完全性を保証するものではありません。
+                </p>
                 
-                <h4>情報の正確性について</h4>
-                <p>本サイトに掲載されている映画の恐怖要素に関する情報は、ユーザーの皆様からの投稿に基づいています。個人の感受性や解釈により、実際の映画内容と異なる場合があります。</p>
-
-                <h4>個人差について</h4>
-                <p>恐怖症の症状や反応には大きな個人差があります。本サイトの情報は参考程度にとどめ、最終的な鑑賞判断はご自身の責任でお願いいたします。</p>
-
-                <h4>医学的アドバイスについて</h4>
-                <p>本サイトは医学的なアドバイスを提供するものではありません。恐怖症に関する治療や対処法については、専門の医療機関にご相談ください。</p>
-
-                <h4>責任の限界</h4>
-                <p>本サイトの利用により生じた精神的・身体的な不調や損害について、運営者は一切の責任を負いません。</p>
-
-                <h4>データの取り扱い</h4>
-                <p>映画情報はTMDB（The Movie Database）のAPIを使用しています。投稿された恐怖要素情報は他のユーザーと共有されます。</p>
-
-                <h4>コンテンツの変更・削除</h4>
-                <p>運営者は予告なく本サイトのコンテンツを変更・削除する場合があります。</p>
-
-                <p><strong>本サイトをご利用の際は、これらの免責事項にご同意いただいたものとみなします。</strong></p>
+                <h3 style="color: #333; margin: 1rem 0;">個人差について</h3>
+                <p style="margin-bottom: 1rem;">
+                    恐怖症の程度や反応には個人差があります。本サイトの情報は参考程度にとどめ、最終的な判断はご自身で行っていただくようお願いします。
+                </p>
+                
+                <h3 style="color: #333; margin: 1rem 0;">医療的アドバイスについて</h3>
+                <p style="margin-bottom: 1rem;">
+                    本サイトは医療的なアドバイスを提供するものではありません。恐怖症に関する専門的な治療やカウンセリングが必要な場合は、医療機関にご相談ください。
+                </p>
+                
+                <h3 style="color: #333; margin: 1rem 0;">責任の範囲</h3>
+                <p style="margin-bottom: 1rem;">
+                    本サイトの利用により生じたいかなる損害についても、運営者は一切の責任を負いません。
+                </p>
+                
+                <h3 style="color: #333; margin: 1rem 0;">データの取り扱い</h3>
+                <p style="margin-bottom: 1rem;">
+                    映画情報はTMDB（The Movie Database）APIを使用しており、投稿された恐怖要素情報は適切に管理されます。
+                </p>
+                
+                <p style="margin-top: 1.5rem; padding: 1rem; background: #f8f9fa; border-radius: 10px;">
+                    本サイトをご利用いただく際は、上記の免責事項にご同意いただいたものとみなします。
+                </p>
             </div>
         </div>
     </div>
 
-    <!-- 映画情報追加モーダル -->
-    <div id="addMovieModal" class="modal">
+    <!-- 映画詳細モーダル -->
+    <div id="movieModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">映画情報の追加・修正</h2>
-                <button class="close-btn" onclick="closeModal('addMovieModal')">&times;</button>
-            </div>
-            <div>
-                <label for="movieTitleInput">映画タイトル：</label>
-                <input type="text" id="movieTitleInput" class="search-input" style="width: 100%; margin: 10px 0;">
-                
-                <h4>含まれる恐怖要素を選択してください：</h4>
-                <div class="phobia-checklist">
-                    <div class="phobia-item">
-                        <input type="checkbox" id="heights" class="phobia-checkbox">
-                        <label for="heights">高所</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="claustrophobia" class="phobia-checkbox">
-                        <label for="claustrophobia">閉所</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="nyctophobia" class="phobia-checkbox">
-                        <label for="nyctophobia">暗所</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="spiders" class="phobia-checkbox">
-                        <label for="spiders">蜘蛛</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="butterflies" class="phobia-checkbox">
-                        <label for="butterflies">蝶</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="ants" class="phobia-checkbox">
-                        <label for="ants">蟻</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="insects" class="phobia-checkbox">
-                        <label for="insects">昆虫</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="frogs" class="phobia-checkbox">
-                        <label for="frogs">蛙</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="snakes" class="phobia-checkbox">
-                        <label for="snakes">ヘビ</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="trypophobia" class="phobia-checkbox">
-                        <label for="trypophobia">集合体</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="blood" class="phobia-checkbox">
-                        <label for="blood">血液描写</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="water" class="phobia-checkbox">
-                        <label for="water">水・溺水</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="thunder" class="phobia-checkbox">
-                        <label for="thunder">雷</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="vomit" class="phobia-checkbox">
-                        <label for="vomit">嘔吐</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="needles" class="phobia-checkbox">
-                        <label for="needles">注射・先端</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="clowns" class="phobia-checkbox">
-                        <label for="clowns">ピエロ</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="ghosts" class="phobia-checkbox">
-                        <label for="ghosts">幽霊・超常現象</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="sexual" class="phobia-checkbox">
-                        <label for="sexual">性的シーン</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="corpses" class="phobia-checkbox">
-                        <label for="corpses">死体</label>
-                    </div>
-                    <div class="phobia-item">
-                        <input type="checkbox" id="other" class="phobia-checkbox">
-                        <label for="other">その他</label>
-                    </div>
+            <span class="close" onclick="closeModal('movieModal')">&times;</span>
+            <div id="movieDetails"></div>
+        </div>
+    </div>
+
+    <!-- 恐怖要素編集モーダル -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('editModal')">&times;</span>
+            <h2 style="color: #667eea; margin-bottom: 1rem;">恐怖要素を編集</h2>
+            <div id="editMovieInfo"></div>
+            <div class="phobia-checklist" id="phobiaChecklist">
+                <div class="phobia-item">
+                    <input type="checkbox" class="phobia-checkbox" id="heights" name="phobia" value="高所">
+                    <label for="heights">高所</label>
                 </div>
-                
-                <button class="submit-btn" onclick="submitMovieData()">情報を送信</button>
+                <div class="phobia-item">
+                    <input type="checkbox" class="phobia-checkbox" id="claustrophobia" name="phobia" value="閉所">
+                    <label for="claustrophobia">閉所</label>
+                </div>
+                <div class="phobia-item">
+                    <input type="checkbox" class="phobia-checkbox" id="darkness" name="phobia" value="暗所">
+                    <label for="darkness">暗所</label>
+                </div>
+                <div class="phobia-item">
+                    <input type="checkbox" class="phobia-checkbox" id="spiders" name="phobia" value="蜘蛛">
+                    <label for="spiders">蜘蛛</label>
+                </div>
+                <div class="phobia-item">
+                    <input type="checkbox" class="phobia-checkbox" id="butterflies" name="phobia" value="蝶">
+                    <label for="butterflies">蝶</label>
+                </div>
+                <div class="phobia-item">
+                    <input type="checkbox" class="phobia-checkbox" id="ants" name="phobia" value="蟻">
+                    <label for="ants">蟻</label>
+                </div>
+                <div class="phobia-item">
+                    <input type="checkbox" class="phobia-checkbox" id="insects" name="phobia" value="昆虫">
+                    <label for="insects">昆虫</label>
+                </div>
+                <div class="phobia-item">
+                    <input type="checkbox" class="phobia-checkbox" id="frogs" name="phobia" value="蛙">
+                    <label for="frogs">蛙</label>
+                </div>
+                <div class="phobia-item">
+                    <input type="checkbox" class="phobia-checkbox" id="snakes" name="phobia" value="ヘビ">
+                    <label for="snakes">ヘビ</label>
+                </div>
+                <div class="phobia-item">
+                    <input type="checkbox" class="phobia-checkbox" id="clusters" name="phobia" value="集合体">
+                    <label for="clusters">集合体</label>
+                </div>
+                <div class="phobia-item">
+                    <input type="checkbox" class="phobia-checkbox" id="blood" name="phobia" value="血液描写">
+                    <label for="blood">血液描写</label>
+                </div>
+                <div class="phobia-item">
+                    <input type="checkbox" class="phobia-checkbox" id="water" name="phobia" value="水・溺水">
+                    <label for="water">水・溺水</label>
+                </div>
+                <div class="phobia-item">
+                    <input type="checkbox" class="phobia-checkbox" id="thunder" name="phobia" value="雷">
+                    <label for="thunder">雷</label>
+                </div>
+                <div class="phobia-item">
+                    <input type="checkbox" class="phobia-checkbox" id="vomit" name="phobia" value="嘔吐">
+                    <label for="vomit">嘔吐</label>
+                </div>
+                <div class="phobia-item">
+                    <input type="checkbox" class="phobia-checkbox" id="needles" name="phobia" value="注射・先端">
+                    <label for="needles">注射・先端</label>
+                </div>
+                <div class="phobia-item">
+                    <input type="checkbox" class="phobia-checkbox" id="clowns" name="phobia" value="ピエロ">
+                    <label for="clowns">ピエロ</label>
+                </div>
+                <div class="phobia-item">
+                    <input type="checkbox" class="phobia-checkbox" id="supernatural" name="phobia" value="幽霊・超常現象">
+                    <label for="supernatural">幽霊・超常現象</label>
+                </div>
+                <div class="phobia-item">
+                    <input type="checkbox" class="phobia-checkbox" id="sexual" name="phobia" value="性的シーン">
+                    <label for="sexual">性的シーン</label>
+                </div>
+                <div class="phobia-item">
+                    <input type="checkbox" class="phobia-checkbox" id="corpse" name="phobia" value="死体">
+                    <label for="corpse">死体</label>
+                </div>
+                <div class="phobia-item">
+                    <input type="checkbox" class="phobia-checkbox" id="other" name="phobia" value="その他">
+                    <label for="other">その他</label>
+                </div>
             </div>
+            <button class="submit-btn" onclick="savePhobiaData()">保存</button>
         </div>
     </div>
 
     <script>
         const API_KEY = '9c5b6fe18f36543b858effdaf87e44e0';
         const BASE_URL = 'https://api.themoviedb.org/3';
+        const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
         
-        // サンプル映画データ（大量のデータを模擬）
-        const sampleMovies = [
-            {id: 550, title: 'ファイト・クラブ', year: 1999, rating: 8.8, phobias: ['血液描写', '暗所', 'その他']},
-            {id: 155, title: 'ダークナイト', year: 2008, rating: 9.0, phobias: ['高所', '暗所', 'その他']},
-            {id: 13, title: 'フォレスト・ガンプ', year: 1994, rating: 8.8, phobias: []},
-            {id: 680, title: 'パルプ・フィクション', year: 1994, rating: 8.9, phobias: ['血液描写', '注射・先端']},
-            {id: 278, title: 'ショーシャンクの空に', year: 1994, rating: 9.3, phobias: ['閉所', '暗所']},
-            {id: 238, title: 'ゴッドファーザー', year: 1972, rating: 9.2, phobias: ['血液描写', '死体']},
-            {id: 424, title: 'シンドラーのリスト', year: 1993, rating: 8.9, phobias: ['血液描写', '死体', 'その他']},
-            {id: 389, title: '12人の怒れる男', year: 1957, rating: 8.9, phobias: ['閉所']},
-            {id: 129, title: '千と千尋の神隠し', year: 2001, rating: 9.3, phobias: ['暗所', 'その他']},
-            {id: 19404, title: 'ディリンジャー', year: 2009, rating: 7.0, phobias: ['血液描写']},
-            {id: 15121, title: 'トイ・ストーリー3', year: 2010, rating: 8.3, phobias: []},
-            {id: 597, title: 'タイタニック', year: 1997, rating: 7.8, phobias: ['水・溺水', '死体']},
-            {id: 77, title: 'メメント', year: 2000, rating: 8.4, phobias: ['血液描写']},
-            {id: 11216, title: 'シネマ・パラディーゾ', year: 1988, rating: 8.5, phobias: []},
-            {id: 807, title: 'セブン', year: 1995, rating: 8.6, phobias: ['血液描写', '死体', '集合体']},
-            {id: 120, title: 'ロード・オブ・ザ・リング', year: 2001, rating: 8.8, phobias: ['昆虫', '蜘蛛', '高所']},
-            {id: 641, title: 'ジュラシック・パーク', year: 1993, rating: 8.1, phobias: ['血液描写', 'その他']},
-            {id: 694, title: 'レオン', year: 1994, rating: 8.5, phobias: ['血液描写']},
-            {id: 1891, title: 'スター・ウォーズ', year: 1977, rating: 8.6, phobias: ['高所']},
-            {id: 603, title: 'マトリックス', year: 1999, rating: 8.7, phobias: ['昆虫', '注射・先端']},
-            // 追加のサンプルデータ
-            {id: 1893, title: 'スター・ウォーズ 帝国の逆襲', year: 1980, rating: 8.7, phobias: ['高所', 'その他']},
-            {id: 1892, title: 'スター・ウォーズ ジェダイの帰還', year: 1983, rating: 8.3, phobias: ['高所']},
-            {id: 122, title: 'ロード・オブ・ザ・リング 二つの塔', year: 2002, rating: 8.7, phobias: ['昆虫', '蜘蛛', '高所', '暗所']},
-            {id: 123, title: 'ロード・オブ・ザ・リング 王の帰還', year: 2003, rating: 8.9, phobias: ['昆虫', '蜘蛛', '高所', '死体']},
-            {id: 27205, title: 'インセプション', year: 2010, rating: 8.8, phobias: ['高所', '水・溺水']},
-            {id: 157336, title: 'インターステラー', year: 2014, rating: 8.6, phobias: ['閉所', '高所']},
-            {id: 49026, title: 'ダークナイト ライジング', year: 2012, rating: 8.4, phobias: ['高所', '閉所']},
-            {id: 1375, title: 'バットマン ビギンズ', year: 2005, rating: 8.2, phobias: ['暗所', '蜘蛛']},
-            {id: 346, title: 'セブン・サムライ', year: 1954, rating: 9.2, phobias: ['血液描写']},
-            {id: 539, title: '今を生きる', year: 1989, rating: 8.1, phobias: []},
-            // ホラー映画サンプル
-            {id: 1408, title: 'シャイニング', year: 1980, rating: 8.4, phobias: ['閉所', '暗所', '幽霊・超常現象', '血液描写']},
-            {id: 693, title: 'ソウ', year: 2004, rating: 7.6, phobias: ['閉所', '血液描写', '死体', '注射・先端']},
-            {id: 1724, title: 'エクソシスト', year: 1973, rating: 8.0, phobias: ['幽霊・超常現象', '嘔吐', 'その他']},
-            {id: 36557, title: 'カジノ・ロワイヤル', year: 2006, rating: 8.0, phobias: ['高所', '血液描写']},
-            {id: 370, title: 'エイリアン', year: 1979, rating: 8.4, phobias: ['閉所', '暗所', '血液描写', 'その他']},
-            {id: 679, title: 'エイリアン2', year: 1986, rating: 8.3, phobias: ['閉所', '暗所', '血液描写', 'その他']},
-            {id: 348, title: 'エイリアン3', year: 1992, rating: 6.4, phobias: ['閉所', '暗所', '血液描写']},
-            {id: 8077, title: 'ワールド・ウォー Z', year: 2013, rating: 7.
+        let currentEditingMovie = null;
+        let phobiaData = {};
+        let currentCategory = 'upcoming';
+
+        // 初期化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCategory('upcoming');
+            initializePhobiaData();
+            
+            // AdSense初期化
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        });
+
+        // サンプル恐怖症データを初期化
+        function initializePhobiaData() {
+            const sampleMovies = [
+                { id: 238, phobias: ['高所', '暗所'] },
+                { id: 424, phobias: ['蜘蛛', '昆虫', '血液描写'] },
+                { id: 278, phobias: ['閉所', '暗所'] },
+                { id: 13, phobias: ['暗所', '幽霊・超常現象'] },
+                { id: 19404, phobias: ['血液描写', '暗所'] },
+                { id: 155, phobias: ['暗所', '幽霊・超常現象'] },
+                { id: 27205, phobias: ['血液描写', '暗所', '幽霊・超常現象'] },
+                { id: 346364, phobias: ['ピエロ', '血液描写'] },
+                { id: 475557, phobias: ['ピエロ', '血液描写', '幽霊・超常現象'] },
+                { id: 1726, phobias: ['蜘蛛', '昆虫'] }
+            ];
+            
+            sampleMovies.forEach(movie => {
+                phobiaData[movie.id] = movie.phobias;
+            });
+        }
+
+        // カテゴリ読み込み
+        async function loadCategory(category) {
+            currentCategory = category;
+            
+            // タブの更新
+            document.querySelectorAll('.category-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            showLoading();
+            
+            try {
+                const response = await fetch(`${BASE_URL}/movie
