@@ -1,0 +1,25 @@
+.loadMore {
+  font-family: "Cinecaption", sans-serif;
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  background-color: #003366;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.loadMore:hover {
+  background-color: #002244;
+}
+
+.movieList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center; /* 中央寄せ */
+  max-width: 1200px; /* ページの横幅に合わせて調整 */
+  margin: 0 auto; /* 中央配置 */
+}

@@ -1,0 +1,37 @@
+.modalContent {
+  color: #fff;
+  font-family: 'Cinecaption', sans-serif;
+  text-align: left;
+  text-align: left;
+}
+
+.status {
+  text-align: center;
+}
+
+.error {
+  color: #ff4444;
+  text-align: center;
+}
+
+.detailWrapper {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.detailPoster {
+  width: 140px;
+  border-radius: 12px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.detailText {
+  font-size: 14px;
+  color: #ddd;
+}
+.scaryList {
+  padding-left: 16px;
+  margin-bottom: 16px;
+}

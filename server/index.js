@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
@@ -17,6 +17,10 @@ app.use((err, req, res, next) => {
   next();
 });
 
+app.get("/", (req, res) => {
+  res.send("Phobiaサーバーは正常に稼働中です！");
+});
+
 const DATA_FILE = path.join(__dirname, "fear_reports.json");
 
 // ファイルが無ければ空配列で初期化
@@ -27,24 +31,18 @@ if (!fs.existsSync(DATA_FILE)) {
 // 重複チェック関数
 const isDuplicateReport = (existingReports, newReport) => {
   return existingReports.some((report) => {
-    // types配列の要素数と中身を比較（順序は無視）
     if (report.types.length !== newReport.types.length) return false;
     const set1 = new Set(report.types);
     const set2 = new Set(newReport.types);
     for (const t of set1) {
       if (!set2.has(t)) return false;
     }
-
-    // detailとtimeをトリムして比較
     if ((report.detail || "").trim() !== (newReport.detail || "").trim()) return false;
     if ((report.time || "").trim() !== (newReport.time || "").trim()) return false;
-
-    // movieIdはない場合もあるので空文字列で統一して比較
     const id1 = report.movieId || "";
     const id2 = newReport.movieId || "";
     if (id1 !== id2) return false;
-
-    return true; // 全て一致すれば重複あり
+    return true;
   });
 };
 
@@ -106,6 +104,14 @@ app.post("/fear_reports", (req, res) => {
   });
 });
 
+// ====== Reactアプリの配信設定 ======
+app.use(express.static(path.join(__dirname, "../build")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../build/index.html"));
+});
+
+// サーバー起動
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });

@@ -1,0 +1,28 @@
+.header {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  background-color: #003366; /* 濃い青 */
+  color: white;
+}
+
+.logo-link {
+  display: inline-block;
+}
+
+.logo-image {
+  height: 100px; /* ロゴを2回り大きく */
+  object-fit: contain;
+  margin-bottom: 0.3rem;
+}
+
+.brand-jp {
+  font-size: 0.95rem;
+  color: #ccc;
+  margin: 0.2rem 0 0.5rem 0;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: #ddd;
+  margin: 0;
+}
