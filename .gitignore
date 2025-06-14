@@ -1,1 +1,14 @@
+# node_modulesは除外
 node_modules/
+
+# buildフォルダも除外
+build/
+
+# envファイルは必ず除外
+.env
+client/.env
+server/.env
+
+# VSCodeやMacの不要ファイル（お好みで）
+.vscode/
+.DS_Store
