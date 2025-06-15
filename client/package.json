@@ -2,6 +2,7 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
+  "homepage": ".",  // ← ここがポイント！
   "dependencies": {
     "@supabase/supabase-js": "^2.50.0",
     "@testing-library/dom": "^10.4.0",
@@ -36,8 +37,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@vitejs/plugin-react": "^4.5.2"
   }
 }
