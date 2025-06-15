@@ -1,15 +1,20 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import "./index.css";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
+const worker = {
+  async fetch(request) {
+    if (request.method === "POST" && new URL(request.url).pathname === "/report") {
+      const data = await request.json();
+      return new Response(
+        JSON.stringify({
+          message: "受け取りました",
+          received: data,
+        }),
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+    return new Response("Hello from Workers!");
+  },
+};
 
-// パフォーマンス測定
-reportWebVitals();
+export default worker;

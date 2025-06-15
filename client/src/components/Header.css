@@ -26,3 +26,19 @@
   color: #ddd;
   margin: 0;
 }
+.logo-container {
+  position: relative;
+  display: inline-block;
+}
+.beta-badge {
+  position: absolute;
+  top: 0;
+  right: -10px;
+  background-color: #ffcc00; /* 黄色（目立ちつつ調和） */
+  color: #003366; /* 背景と調和した濃紺 */
+  font-size: 0.75rem;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 10px;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+}

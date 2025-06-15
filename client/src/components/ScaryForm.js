@@ -34,7 +34,7 @@ const ScaryForm = ({ onAdd }) => {
     const report = { types, detail, time: time.trim() };
 
     try {
-      const response = await fetch("http://localhost:3001/fear_reports", {
+      const response = await fetch("https://phobia-api.kuroiha.workers.dev/report", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(report),

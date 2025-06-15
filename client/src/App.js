@@ -11,29 +11,27 @@ import playfairDisplayTTF from "./fonts/PlayfairDisplay-VariableFont_wght.ttf";
 import "./styles.css";
 import "./App.css";
 
-// 重複チェック関数
+// APIのベースURLは環境変数から取得（.envにREACT_APP_API_BASE_URL=http://localhost:3001など記載）
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
+// 重複チェック関数は変更なし
 const isDuplicateReport = (existingReports, newReport) => {
   return existingReports.some((report) => {
-    // types 配列の長さが違ったら異なる
     if (report.types.length !== newReport.types.length) return false;
 
-    // types 配列の内容をSet化して比較（順序無視）
     const set1 = new Set(report.types);
     const set2 = new Set(newReport.types);
     for (const t of set1) {
       if (!set2.has(t)) return false;
     }
 
-    // detail と time はトリムして完全一致で判定
     if (report.detail.trim() !== newReport.detail.trim()) return false;
     if ((report.time || "").trim() !== (newReport.time || "").trim()) return false;
 
-    // movieId も比較（片方nullやundefinedなら空文字に統一して比較）
     const id1 = report.movieId || "";
     const id2 = newReport.movieId || "";
     if (id1 !== id2) return false;
 
-    // すべて一致したら重複あり
     return true;
   });
 };
@@ -51,7 +49,7 @@ function App() {
   // 恐怖要素一覧用state
   const [fearReports, setFearReports] = useState([]);
 
-  // フォントを動的に読み込む（初回マウント時のみ）
+  // フォントの動的読み込み（初回マウント時のみ）
   useEffect(() => {
     const style = document.createElement("style");
     style.textContent = `
@@ -74,11 +72,11 @@ function App() {
     };
   }, []);
 
-  // 初回マウント時に恐怖要素一覧を取得
+  // 初回マウント時に恐怖要素一覧を取得（環境変数API_BASE_URL使用）
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const res = await fetch("http://localhost:3001/fear_reports");
+        const res = await fetch(`${API_BASE_URL}/fear_reports`);
         if (!res.ok) throw new Error("恐怖要素一覧の取得に失敗しました");
         const data = await res.json();
         setFearReports(data);
@@ -123,14 +121,13 @@ function App() {
 
   // 恐怖要素の登録処理（MovieModalから呼ばれる）
   const handleAddFearReport = async (report) => {
-    // 重複チェックを先に行う
     if (isDuplicateReport(fearReports, report)) {
       alert("同じ内容の恐怖要素が既に登録されています。");
-      return; // 重複なら送信をキャンセル
+      return;
     }
 
     try {
-      const res = await fetch("http://localhost:3001/fear_reports", {
+      const res = await fetch(`${API_BASE_URL}/fear_reports`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(report),
@@ -140,13 +137,12 @@ function App() {
         throw new Error(`送信エラー: ステータスコード ${res.status}`);
       }
 
-      // サーバーから返却されたJSONを取得するがalertは表示しない
       await res.json();
 
       closeModal();
 
       // 送信後に最新の恐怖要素一覧を再取得して画面更新
-      const updatedRes = await fetch("http://localhost:3001/fear_reports");
+      const updatedRes = await fetch(`${API_BASE_URL}/fear_reports`);
       if (!updatedRes.ok) throw new Error(`更新取得エラー: ステータス ${updatedRes.status}`);
       const updatedData = await updatedRes.json();
       setFearReports(updatedData);
