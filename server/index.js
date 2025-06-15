@@ -1,35 +1,13 @@
-// ====== デバッグ出力 ======
-console.log("✅ mongoose require path:", (() => {
-  try { return require.resolve("mongoose"); }
-  catch (e) { return e.message; }
-})());
-
-console.log("✅ Running in folder:", __dirname);
-console.log("✅ Current working directory:", process.cwd());
-
-// ====== モジュール読み込み ======
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
-const mongoose = require("mongoose");
 require("dotenv").config();
 
-// ====== Mongooseモデル読み込み ======
-const FearReport = require("./models/FearReport"); // ← 相対パスOK
+const { addFearReport, getFearReports } = require("./notionClient");
 
-// ====== Express設定 ======
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// ====== MongoDB接続 ======
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-  .then(() => console.log("✅ MongoDB connected!"))
-  .catch(err => console.error("❌ MongoDB connection error:", err));
-
-// ====== ミドルウェア設定 ======
 app.use(cors());
 app.use(express.json());
 
@@ -41,44 +19,11 @@ app.use((err, req, res, next) => {
   next();
 });
 
-// ====== 動作確認ルート ======
 app.get("/", (req, res) => {
-  res.send("Phobiaサーバーは正常に稼働中です！");
+  res.send("Phobiaサーバーは正常に稼働中です！（MongoDBは使いません）");
 });
 
-// ====== 重複チェック関数 ======
-const isDuplicateReport = (existingReport, newReport) => {
-  if (existingReport.types.length !== newReport.types.length) return false;
-
-  const set1 = new Set(existingReport.types);
-  const set2 = new Set(newReport.types);
-  for (const type of set1) {
-    if (!set2.has(type)) return false;
-  }
-
-  const trim = str => (str || "").trim();
-
-  if (trim(existingReport.detail) !== trim(newReport.detail)) return false;
-  if (trim(existingReport.time) !== trim(newReport.time)) return false;
-  if ((existingReport.movieId || "") !== (newReport.movieId || "")) return false;
-
-  return true;
-};
-
-// ====== APIルート ======
-
-// GET: 恐怖要素の一覧取得
-app.get("/fear_reports", async (req, res) => {
-  try {
-    const reports = await FearReport.find().sort({ createdAt: -1 }).exec();
-    res.json(reports);
-  } catch (err) {
-    console.error("❌ MongoDB取得エラー:", err);
-    res.status(500).json({ error: "恐怖要素の読み込みに失敗しました" });
-  }
-});
-
-// POST: 恐怖要素の追加（重複チェックつき）
+// POST: 恐怖要素をNotionに追加
 app.post("/fear_reports", async (req, res) => {
   const newReport = req.body;
 
@@ -91,32 +36,32 @@ app.post("/fear_reports", async (req, res) => {
   }
 
   try {
-    const existingReports = await FearReport.find().exec();
-    const duplicate = existingReports.some(report => isDuplicateReport(report, newReport));
-
-    if (duplicate) {
-      return res.status(409).json({ error: "重複した恐怖要素の登録はできません。" });
-    }
-
-    const fearReport = new FearReport(newReport);
-    await fearReport.save();
-
-    console.log("✅ 新しい恐怖要素を追加:", newReport);
-    res.status(201).json({ message: "送信に成功しました！" });
-  } catch (err) {
-    console.error("❌ MongoDB保存エラー:", err);
-    res.status(500).json({ error: "恐怖要素の保存に失敗しました" });
+    const response = await addFearReport(newReport);
+    console.log("💾 Notionに保存成功:", response.id);
+    res.status(201).json({ message: "Notionに保存しました", id: response.id });
+  } catch (error) {
+    console.error("❌ Notion保存エラー:", error);
+    res.status(500).json({ error: "Notionへの保存に失敗しました" });
   }
 });
 
-// ====== Reactアプリ配信（build） ======
-app.use(express.static(path.join(__dirname, "../client/build")));
+// GET: Notionから恐怖要素レポートを取得して返す
+app.get("/fear_reports", async (req, res) => {
+  try {
+    const reports = await getFearReports();
+    res.json(reports);
+  } catch (error) {
+    console.error("❌ Notion取得エラー:", error);
+    res.status(500).json({ error: "Notionデータ取得に失敗しました" });
+  }
+});
 
+// Reactアプリ配信
+app.use(express.static(path.join(__dirname, "../client/build")));
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
 
-// ====== サーバー起動 ======
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on port ${PORT}`);
 });
